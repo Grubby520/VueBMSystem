@@ -1,0 +1,131 @@
+// 通用
+.Btn{
+    font-size: 14px;
+    margin-right: 8px;
+    cursor: pointer;
+    min-width: 65px !important;
+    padding:0 6px;
+    display: inline-block;
+    box-sizing:border-box;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 3px ;
+    cursor:pointer;
+    border: none;
+    transition:$transition-all;
+}
+.Btn .icon{
+    font-size: 12px;
+    margin-right: 4px;
+}
+// .Btn-default{
+//     color: #fff !important;
+//     background-color: #25a4f6 !important;
+//     letter-spacing: 2px;
+// }
+
+// 操作類按鈕
+// .Btn-opt{
+//     display: inline-block;
+//     border-radius: 3px;
+//     min-width: 65px;
+//     padding: 0 8px;
+//     height: 30px;
+//     line-height: 30px;
+//     border: 1px solid #25a4f6;
+//     color: #25a4f6;
+//     background-color: #FFF;
+// }
+// .Btn-opt:hover, .Btn-opt.active{
+//     background-color: #25a4f6;
+//     color:#fff
+// }
+// .Btn-opt-deny{
+//     border: 1px solid #ff3b2f;
+//     color: #ff3b2f;
+// }
+// .Btn-opt-deny:hover, .Btn-opt-deny.active{
+//     color: #fff;
+//     background-color:#ff3b2f
+// }
+
+// 分类
+.Btn-primery{
+    color: $text-color;
+    border: 1px solid $border-color;
+    background-color: #fff;
+    letter-spacing: 2px;
+    &:hover{
+        background-color: #66b1ff;
+        border-color: #66b1ff;
+        color: #fff;
+    }
+    &.active{
+        background-color: $color-primary;
+        border-color: $color-primary;
+        color: #fff;
+    }
+}
+.Btn-default{
+    color: #fff !important;
+    border: 1px solid $color-primary;
+    background-color: $color-primary;
+    letter-spacing: 2px;
+    &:hover{
+        background-color: $color-primary-light;
+        border-color: $color-primary-light;
+        color: #fff;
+    }
+}
+.Btn-success{
+    color: #fff !important;
+    background-color: $color-success;
+    border: 1px solid $color-success;
+    letter-spacing: 2px;
+    &:hover{
+        border-color: $color-success-light;
+        background-color: $color-success-light;
+    }
+}
+.Btn-info{
+    color: #fff !important;
+    background-color: $color-info;
+    border: 1px solid $color-info;
+    letter-spacing: 2px;
+    &:hover{
+        border-color: $color-info-light;
+        background-color: $color-info-light;
+    }
+}
+.Btn-warn{
+    color: #fff !important;
+    background-color: $color-warning;
+    border: 1px solid $color-warning;
+    letter-spacing: 2px;
+    &:hover{
+        border-color: $color-warning-light;
+        background-color: $color-warning-light;
+    }
+}
+.Btn-danger{
+    color: #fff !important;
+    background-color: $color-danger;
+    border: 1px solid $color-danger;
+    letter-spacing: 2px;
+    &:hover{
+        border-color: $color-danger-light;
+        background-color: $color-danger-light;
+    }
+}
+
+// 大小
+.Btn-large{
+    height:36px;
+}
+
+.Btn-radius{
+    border-radius:20em;
+}
+
+

@@ -1,0 +1,35 @@
+$spacing:0.5em;
+
+.nodisplay {
+    display: none;
+}
+
+.waui-tree li {
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.waui-tree ul > li{
+    margin-top: $spacing;
+}
+
+.waui-tree li > a {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.waui-tree li > a > span {
+    display: inline-block;
+    margin-left: $spacing;
+    vertical-align: middle;
+    white-space: nowrap;
+    color:#666;
+}
+
+.waui-tree li.active > a > span {
+    color: #25a4f6;
+}
+
+.waui-tree li > ul {
+    margin-left: 1.5em;
+}

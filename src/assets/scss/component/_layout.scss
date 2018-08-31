@@ -1,0 +1,58 @@
+.flex-layout {
+    display: flex;
+}
+
+.flex-content-center {
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-align-center {
+    justify-content: center;
+}
+
+.flex-vlign-center {
+    align-items: center;
+}
+
+.flex-item-row {
+    flex-direction: column;
+}
+
+.flex-item-column {
+    flex-direction: row;
+}
+
+.flex-space-1 {
+    flex: 1;
+}
+
+.flex-space-2 {
+    flex: 2;
+}
+
+.flex-space-3 {
+    flex: 3;
+}
+
+/*表格布局*/
+.table-block {
+  display: table;
+}
+
+.table-row {
+  display: table-row;
+}
+
+.table-cell {
+  display: table-cell;
+}
+
+.table-v-center {
+  vertical-align: middle;
+}
+
+.table-h-center {
+  text-align: center;
+}
+

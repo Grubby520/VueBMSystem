@@ -1,0 +1,36 @@
+$border-color:#b5b5b5;
+$border-active-color:#9bc4e7;
+$text-color:#333;
+$text-color-light:#777;
+
+$color-primary:#2097f4;
+$color-success: #67c23a !default;
+$color-warning: #ffb438 !default;
+$color-danger: #e62b2d !default;
+$color-critical: #8c1919 !default;
+$color-info: #909399 !default;
+
+$color-primary-light: mix(#fff, $color-primary, 20%);
+$color-success-light: mix(#fff, $color-success, 20%);
+$color-warning-light: mix(#fff, $color-warning, 20%);
+$color-danger-light: mix(#fff, $color-danger, 20%);
+$color-critical-light: mix(#fff, $color-critical, 20%);
+$color-info-light: mix(#fff, $color-info, 20%);
+$color-primary-lighter: mix(#fff, $color-primary, 80%);
+
+// 链接脸色
+$link-color:$color-primary;
+
+// 狀態顔色
+$status-color_critical:$color-critical;
+$status-color_high:$color-danger;
+$status-color_warning:$color-warning;
+$status-color_normal:$color-primary;
+
+// icon 颜色
+$icon-color-default:#aaa;
+$icon-color-hover:$color-primary;
+
+// transiton
+$transition-all: all .3s cubic-bezier(.645,.045,.355,1) !default;
+$transition-border: border-color .3s cubic-bezier(.645,.045,.355,1) !default;

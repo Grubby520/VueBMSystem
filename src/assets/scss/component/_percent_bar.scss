@@ -1,0 +1,51 @@
+.outer-bar {
+    position:relative;
+    width:80%;
+    height: 16px;
+    background:#ddd;
+}
+
+.inner-bar {
+    height:100%;
+}
+
+.inner-bar span {
+    position: absolute;
+    right: -4em;
+    top: -10%;
+}
+
+.percent60 {
+    background:#65c83f;
+}
+
+.percent60 span {
+    color:#65c83f;
+}
+
+.percent90 {
+    background:#f39c12;
+}
+
+.percent90 span {
+    color:#f39c12;
+}
+
+.percent100 {
+    background:#cf2b10;
+}
+
+.percent100 span {
+    color:#cf2b10;
+}
+
+/*扩展*/
+.outer-bar.inner-pos {
+    display: inline-block;
+    width: 50%;
+    vertical-align: middle;
+}
+
+.outer-bar.inner-pos span {
+    left: 0;
+}

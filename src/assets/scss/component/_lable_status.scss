@@ -1,0 +1,76 @@
+.label-btn{
+    border-radius: 2px;
+    height: 20px;
+    padding: 0 8px;
+    display: inline-block;
+    letter-spacing: 2px;
+    color:#fff;
+    text-align: center;
+    line-height: 20px;
+    transition:$transition-all;
+    &.large{
+        padding: 4px 10px;
+    }
+    &.radius{
+        border-radius:30em;
+    }
+    &.pointer{
+        cursor:pointer;
+    }
+}
+
+.label-btn.default{
+    color: $text-color;
+    border: 1px solid $border-color;
+    background-color: #fff;
+    letter-spacing: 2px;
+    &:hover{
+        background-color: #66b1ff;
+        border-color: #66b1ff;
+        color: #fff;
+    }
+    &.active{
+        background-color: $color-primary;
+        border-color: $color-primary;
+        color: #fff;
+    }
+}
+
+.label-btn.critical{
+    background:$color-critical;
+}
+
+.label-btn.high, .label-btn.danger{
+    background: $color-danger;
+    &:hover{
+        border-color: $color-danger-light;
+        background-color: $color-danger-light;
+    }
+}
+
+.label-btn.warning ,.label-btn.warn ,
+.label-btn._warning {
+    background: $color-warning;
+    &:hover{
+        border-color: $color-warning-light;
+        background-color: $color-warning-light;
+    }
+}
+
+.label-btn.low, .label-btn.primery{
+    border: 1px solid $color-primary;
+    background: $color-primary;
+    &:hover{
+        background-color: $color-primary-light;
+        border-color: $color-primary-light;
+        color: #fff;
+    }
+}
+
+.label-btn.info, .label-btn.success{
+       background: $color-success;
+       &:hover{
+           background-color: $color-success-light;
+           border-color: $color-success-light;
+       }
+   }

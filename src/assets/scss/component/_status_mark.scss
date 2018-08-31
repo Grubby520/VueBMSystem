@@ -1,0 +1,41 @@
+.status-mark {
+    display: inline-block;
+}
+
+.status-mark:before {
+    content: '';
+    display: inline-block;
+    height: 1em;
+    width:1em;
+    margin-right: 0.5em;
+    border-radius: 100%;
+    vertical-align: middle;
+}
+
+.status-mark-critical {
+    color: $status-color_critical;
+    &:before {
+        background: $status-color_critical;
+    }
+}
+
+.status-mark-high {
+    color: $status-color_high;
+    &:before {
+        background: $status-color_high;
+    }
+}
+
+.status-mark-warning {
+    color: $status-color_warning;
+    &:before {
+        background: $status-color_warning;
+    }
+}
+
+.status-mark-normal {
+    color: $status-color_normal;
+    &:before {
+        background: $status-color_normal;
+    }
+}

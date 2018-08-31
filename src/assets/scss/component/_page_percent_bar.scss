@@ -1,0 +1,87 @@
+
+  .percent-bar {
+    position:relative;
+  }
+
+  .percent-bar-label,
+  .percent-bar-content {
+    position:absolute;
+  }
+
+  .percent-bar-label {
+    width:4em;
+  }
+
+  .percent-bar-label:after {
+    position: absolute;
+    content:'';
+    height:0;
+    width:0;
+    border-style:solid;
+  }
+
+  .percent-bar-num,
+  .percent-bar-text {
+    display:inline-block;
+    white-space: nowrap;
+  }
+
+  .percent-bar-num {
+    padding-left:0.5em;
+    color: #fff;
+  }
+
+  .percent-bar-text {
+    position:absolute;
+    left:5em;
+    color:#333;
+  }
+
+  .percent-bar-content {
+    height:100%;
+  }
+
+  .high-percent-content {
+    background:#FECCCD;
+  }
+
+  .middle-percent-content {
+    background:#f5c786;
+  }
+
+  .low-percent-content {
+    background:#D8F29B;
+  }
+
+  .high-percent-label {
+    background:#E70012;
+    &::after {
+        border-color: transparent transparent transparent #E70012;
+    }
+  }
+
+  .middle-percent-label {
+    background:#f39005;
+    &::after {
+        border-color: transparent transparent transparent #f39005;
+    }
+  }
+
+  .low-percent-label {
+    background:#A2D328;
+    &::after {
+        border-color: transparent transparent transparent #A2D328;
+    }
+  }
+
+  .percent-bar-typeone {
+    height:30px;
+    line-height:30px;
+    background:#F4F4F4;
+  }
+
+  .percent-bar-typeone .percent-bar-label:after {
+    right: -15px;
+    border-width:15px 8px;
+
+  }

@@ -1,0 +1,53 @@
+/* 块 */
+%Row-title{
+    // padding-top:12px;
+    // padding-bottom:12px;
+    font-size: 14px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin:0;
+    font-weight: bold;
+    line-height:45px;
+    &.label::before{
+        width:4px;
+        height:14px;
+        content:'';
+        display: inline-block;
+        background: #2197f4;
+        margin-right: 8px;
+        // vertical-align: text-top;
+    }
+}
+.Row-title{
+    @extend %Row-title
+}
+.Row-wapper,.Row-wrapper{
+    background: #fff;
+
+}
+%Row-content{
+    background:#fff;
+    padding:10px 20px 20px 20px;
+}
+.Row-content{
+    @extend %Row-content
+}
+
+/* 标题 */
+.Title{
+    font-weight: bolder;
+    margin:0;
+    font-size: 14px;
+    display:inline-block;
+}
+
+/* 提示 */
+.Row-info{
+    font-size: 12px;
+    font-weight: normal;
+    .nbr{
+        color:#94C52E;
+        font-weight: bold;
+    }
+}
+

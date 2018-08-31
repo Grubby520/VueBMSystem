@@ -1,0 +1,60 @@
+@import '../mixins/clearfix';
+.tc{text-align:center;}
+.fr{float:right;}
+.fl{float:left;}
+.clearfix{ @include clearfix;}
+.Idot{
+    white-space: nowrap;
+     text-overflow:ellipsis;
+     overflow: hidden;
+     width:100%;
+}
+.webkit-box{
+    display: flex;
+}
+.text-center{
+    text-align: center;
+}
+.side{
+    float: left;
+}
+.main{
+    overflow: hidden;
+}
+.right{
+    float: right;
+}
+.icon-triange{
+
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 4px dashed;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+}
+.table-cell{
+    display: table-cell;
+    vertical-align: middle;
+    height: 100%;
+}
+.table{
+    display: table;
+}
+.link{
+    color:$link-color;
+}
+
+.mt15 {
+  margin-top: 15px;
+}
+
+.whiteBg {
+  background: #fff;
+}
+
+[v-cloak] {
+  display: none;
+}

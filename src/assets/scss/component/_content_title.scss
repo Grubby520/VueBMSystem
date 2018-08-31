@@ -1,0 +1,17 @@
+.content-title > span{
+    display: inline-block;
+    margin: 20px 20px 20px 0;
+    padding: 0 0.3em;
+    font-size: 14px;
+    font-weight: bolder
+}
+
+.content-title > span:before {
+    display: inline-block;
+    content: '';
+    width: 4px;
+    height: 14px;
+    margin-right: 8px;
+    vertical-align: middle;
+    background: rgb(33,150,243);
+}

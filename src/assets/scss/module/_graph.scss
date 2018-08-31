@@ -1,0 +1,25 @@
+.graph-box{
+    background-color: #fff;
+}
+.graph-title{
+    @extend %Row-title;
+
+}
+.graph-title .graph-nav{
+    color:#333;
+    padding: 0 4px;
+    font-size: 12px;
+    font-weight: normal;
+}
+.graph-title .graph-nav:hover, .graph-title .graph-nav.active{
+    color:#25a4f6;
+}
+.info{
+    @extend .Row-info
+}
+.graph-content{
+    width: 100%;
+    padding:0 20px 20px 20px !important;
+    height: 250px;
+    margin-top: 10px;
+}

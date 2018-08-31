@@ -1,0 +1,91 @@
+.nodata-info {
+	/*background: url(../../images/nodata.png) no-repeat center center;*/
+}
+
+/*单数据-top5样式*/
+
+.top5-plugin {
+
+}
+
+.top5-title {
+	margin-bottom: 20px
+}
+
+.top5-content {
+	height: 200px;
+}
+
+/*进度条背景样式*/
+.progress-suject-bgcolor-1 {
+	background-color: #682D97;
+}
+
+.progress-suject-bgcolor-2 {
+	background-color: #BBA0E8;
+}
+
+.progress-suject-bgcolor-3 {
+	background-color: #F48071;
+}
+
+.progress-suject-bgcolor-4 {
+	background-color: #94C52E;
+}
+
+.progress-suject-bgcolor-5 {
+	background-color: #48BEFF;
+}
+
+.progress-plugin {
+	margin-bottom: 0.5em;
+}
+
+.progress-text {
+	margin-bottom: 0.25em;
+}
+
+.progress-text .text-name {
+	float:left;
+}
+
+.progress-text .text-value {
+	float:right;
+}
+
+.progress-container {
+	position:relative;
+	height: 10px;
+	background-color: #F4F5F7;
+}
+
+.progress-container:hover {
+	cursor:pointer;
+}
+
+.progress-tip {
+	position: absolute;
+	display:none;
+	min-width:200px;
+	background-color: #fff;
+    opacity: 0.8;
+    box-shadow: 0 0 5px #ccc;
+    padding: 1em;
+	z-index: 1000;
+}
+
+.progress-tip ul > li {
+	margin: 0.5em 0;
+}
+
+.tip-title-icon {
+	display:inline-block;
+	padding: 0.5em;
+	margin-right: 0.5em;
+	vertical-align: middle;
+}
+
+.progress-innercore {
+	height: 100%;
+}
+

@@ -1,0 +1,53 @@
+{
+  "name": "wishstack-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve --web",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "build:components": "vue-cli-service build --target wc-async **/*.vue"
+  },
+  "dependencies": {
+    "async-validator": "^1.8.2",
+    "axios": "^0.18.0",
+    "babel-polyfill": "^6.26.0",
+    "d3": "^3.5.17",
+    "echarts": "^4.1.0",
+    "element-ui": "^2.4.4",
+    "jquery": "^3.3.1",
+    "strip-ansi": "^3.0.1",
+    "vue": "^2.5.16",
+    "vue-click-outside": "^1.0.7",
+    "vue-router": "^3.0.1",
+    "vue-template-compiler": "^2.5.16",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.0.0-rc.3",
+    "@vue/cli-plugin-eslint": "^3.0.0-rc.5",
+    "@vue/cli-service": "^3.0.0-rc.3",
+    "@vue/eslint-config-standard": "^3.0.0-rc.5",
+    "lint-staged": "^7.2.0",
+    "node-sass": "^4.9.2",
+    "sass-loader": "^7.0.3"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "src/views/*.js": [
+      "vue-cli-service lint",
+      "git add"
+    ],
+    "src/*.vue": [
+      "vue-cli-service lint",
+      "git add"
+    ]
+  }
+}

@@ -1,0 +1,168 @@
+
+@keyframes rotary
+{
+  0% {
+    transform:rotate(0deg);
+  }
+  25% {
+    transform:rotate(90deg);
+  }
+  50% {
+    transform:rotate(180deg);
+  }
+  75% {
+    transform:rotate(270deg);
+  }
+  100% {
+    transform:rotate(360deg);
+  }
+
+}
+
+.flex-con {
+	display:flex;
+    align-items:center;
+    justify-content: center;
+}
+
+.flex-dir-row {
+	-webkit-flex-direction: row;
+	flex-direction: row;
+}
+
+.flex-dir-col {
+	-webkit-flex-direction: column;
+	flex-direction: column;
+}
+
+.flex-num-auto {
+	-webkit-flex: auto;
+	flex: auto;
+}
+
+.status-con {
+	width:100px;
+}
+
+.status-circle {
+	position: relative;
+    height:100px;
+    background:#fff;
+}
+
+.rotating-circle {
+  border-radius:100%;
+}
+
+.rotary-circle {
+  height:100%;
+  box-sizing:border-box;
+  animation:rotary 2s infinite;
+  -webkit-animation:rotary 2s infinite;
+}
+
+.content-circle {
+  position: absolute;
+  top:1%;
+  left:1%;
+  width:98%;
+  height:98%;
+  background:#fff;
+}
+
+.detail-circle {
+  width:90%;
+  height:90%;
+  color:#fff;
+}
+
+.res-icon {
+	font-size:30px;
+}
+
+.status-text {
+	width:90%;
+	margin:1em auto;
+	padding:0.2em;
+	border-radius:1em;
+	color:#fff;
+}
+
+/*不同状态下的个性化样式表设置-各开发人员可自行添加不同的状态*/
+.normal-status .detail-circle,
+.normal-status .status-text {
+    background:rgb(68,218,111);
+}
+
+.normal-status .rotary-circle {
+    /* autoprefixer: off */
+    background:-webkit-linear-gradient(left,rgba(68,218,111,1),rgba(68,218,111,0) 50%,rgba(68,218,111,1));
+    background:-o-linear-gradient(left,rgba(68,218,111,1),rgba(68,218,111,0) 50%,rgba(68,218,111,1));
+    background:-ms-linear-gradient(left,rgba(68,218,111,1),rgba(68,218,111,0) 50%,rgba(68,218,111,1));
+    background:linear-gradient(left,rgba(68,218,111,1),rgba(68,218,111,0) 50%,rgba(68,218,111,1));
+    /* autoprefixer: on */
+}
+
+.error-status .detail-circle,
+.error-status .status-text {
+    background:rgb(255,59,47);
+}
+
+.error-status .rotary-circle {
+    /* autoprefixer: off */
+    background:-webkit-linear-gradient(left,rgba(255,59,47,1),rgba(255,59,47,0) 50%,rgba(255,59,47,1));
+    background:-o-linear-gradient(left,rgba(255,59,47,1),rgba(255,59,47,0) 50%,rgba(255,59,47,1));
+    background:-ms-linear-gradient(left,rgba(255,59,47,1),rgba(255,59,47,0) 50%,rgba(255,59,47,1));
+    background:linear-gradient(left,rgba(255,59,47,1),rgba(255,59,47,0) 50%,rgba(255,59,47,1));
+    /* autoprefixer: on */
+}
+
+
+$_unknownColor:#F18930;
+$_healthColor:#5AC130;
+$_offlineColor:#FE3A32;
+
+._unknown-status {
+  .detail-circle,
+  .status-text {
+    background:$_unknownColor;
+  }
+  .rotary-circle {
+      /* autoprefixer: off */
+      background:-webkit-linear-gradient(left,$_unknownColor,rgba(68,218,111,0) 50%,$_unknownColor);
+      background:-o-linear-gradient(left,$_unknownColor,rgba(68,218,111,0) 50%,$_unknownColor);
+      background:-ms-linear-gradient(left,$_unknownColor,rgba(68,218,111,0) 50%,$_unknownColor);
+      background:linear-gradient(left,$_unknownColor,rgba(68,218,111,0) 50%,$_unknownColor);
+      /* autoprefixer: on */
+  }
+}
+
+._health-status {
+  .detail-circle,
+  .status-text {
+    background:$_healthColor;
+  }
+  .rotary-circle {
+      /* autoprefixer: off */
+      background:-webkit-linear-gradient(left,$_healthColor,rgba(68,218,111,0) 50%,$_healthColor);
+      background:-o-linear-gradient(left,$_healthColor,rgba(68,218,111,0) 50%,$_healthColor);
+      background:-ms-linear-gradient(left,$_healthColor,rgba(68,218,111,0) 50%,$_healthColor);
+      background:linear-gradient(left,$_healthColor,rgba(68,218,111,0) 50%,$_healthColor);
+      /* autoprefixer: on */
+  }
+}
+
+._offline-status {
+  .detail-circle,
+  .status-text {
+    background:$_offlineColor;
+  }
+  .rotary-circle {
+      /* autoprefixer: off */
+      background:-webkit-linear-gradient(left,$_offlineColor,rgba(68,218,111,0) 50%,$_offlineColor);
+      background:-o-linear-gradient(left,$_offlineColor,rgba(68,218,111,0) 50%,$_offlineColor);
+      background:-ms-linear-gradient(left,$_offlineColor,rgba(68,218,111,0) 50%,$_offlineColor);
+      background:linear-gradient(left,$_offlineColor,rgba(68,218,111,0) 50%,$_offlineColor);
+      /* autoprefixer: on */
+  }
+}

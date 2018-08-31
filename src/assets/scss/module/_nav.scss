@@ -1,0 +1,29 @@
+.nav{
+    @include clearfix;
+    background-color: #fff;
+    li{
+       padding: 0 15px;
+       height: 45px;
+       line-height: 45px;
+       text-align: center;
+       border: 1px solid #ddd;
+       margin-bottom: 0;
+       float: left;
+       a{
+           letter-spacing: 2px;
+           font-weight: bolder;
+           text-decoration: none;
+           color:#7a7a7a;
+       }
+       &.active{
+           border:none;
+           border-top:3px solid #25a4f6;
+           &:after{
+                content: initial;
+           }
+           a{
+               color: #25a4f6;
+           }
+       }
+    }
+}

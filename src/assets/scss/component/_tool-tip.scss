@@ -1,0 +1,28 @@
+.Tooltip{
+    display: none;
+    position: absolute;
+    left: 0;
+    top:0;
+    background:#fff;
+    z-index: 999;
+    border:1px solid rgb(221, 221, 221);
+}
+.Tooltip-title{
+    background: #25a4f6;
+    line-height: 1.8;
+    font-size: 14px;
+    padding: 0 12px;
+    color: #fff;
+}
+.Tooltip-content{
+    padding:10px 0;
+    background: #fff;
+    dl{
+        font-size: 12px;
+        padding:0 12px;
+        margin-bottom:4px;
+    }
+    dt,dd{
+        line-height: 1.6;
+    }
+}

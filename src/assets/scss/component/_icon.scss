@@ -1,0 +1,42 @@
+.Icon{
+    font-size: 12px;
+    display: inline-block;
+    background-repeat:no-repeat;
+    vertical-align: middle;
+    background-size: 100%;
+}
+
+// 背景型的icon
+// 提示 icon
+.Icon-success{
+    background-image:url(~@/assets/image/icon-success.png);
+    width: 14px;
+    height: 14px;
+}
+.Icon-info{
+    background-image:url(~@/assets/image/icon-info.png);
+    width: 14px;
+    height: 14px;
+}
+.Icon-error, .Icon-tip-error{
+    background-image:url(~@/assets/image/icon-error.png);
+    width: 14px;
+    height: 14px;
+    color:$color-danger;
+}
+.Icon-tip-primery{
+    background-image:url(~@/assets/image/icon-tip-primery.png);
+    width: 14px;
+    height: 14px;
+}
+
+.Icon-triangle{
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 4px dashed;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+}

@@ -1,0 +1,335 @@
+%Icon-arrow-down{
+    width: 12px;
+    height: 12px;
+    border-top:1px solid $border-color;
+    border-right:1px solid $border-color;
+    transform: rotateZ(135deg);
+}
+%Icon-arrow-up{
+    width: 12px;
+    height: 12px;
+    border-top:1px solid $border-color;
+    border-right:1px solid $border-color;
+    transform: rotateZ(-45deg);
+}
+.Table{
+    background: #fff;
+    &.no-padding{
+        .Table-title,.Table-list,.Table-toolbar{
+            padding-left:0;
+            padding-right:0;
+        }
+    }
+    .icon-table-up{
+        display:inline-block;
+        width:12px;
+        height:12px;
+        &::before{
+            width:100%;
+            height:100%;
+            display:inline-block;
+        }
+    }
+    .info{
+        margin-bottom:10px;
+    }
+}
+
+.Table-toolbar{
+    padding-left: 20px;
+    padding-right: 20px;
+    .select{
+        min-width: 53px;
+        width: initial;
+    }
+    .input, input[type="text"]{
+        font-size: 12px;
+        color: $text-color;
+        width: 180px;
+        border-radius: 3px;
+        border: 1px solid #d2d2d2;
+        padding-left: 10px;
+        height: 30px;
+        box-shadow: none;
+        outline: none;
+    }
+    .search{
+        @extend .Btn;
+        @extend .Btn-default;
+        box-shadow: none!important;
+        text-shadow: none!important;
+        margin-left: 8px!important;
+        margin-right: 8px!important;
+        border-style: none;
+    }
+}
+
+.Table-title{
+    @extend %Row-title;
+    h3{
+        @extend .Title;
+        margin:0;
+        display: inline-block;
+    }
+    .Icon-arrow-down{
+        @extend %Icon-arrow-down;
+    }
+    .Icon-arrow-up{
+        @extend %Icon-arrow-up;
+        transition: transform .3s ease 0s;
+    }
+    .Table-toggle{
+        float: right;
+    }
+
+}
+
+.Table-sort{
+    &::before{
+        @extent .Icon-arrow-down
+    }
+    &::after{
+        @extent .Icon-arrow-up
+    }
+}
+
+.Table-list{
+    @extend %Row-content;
+    th{
+        box-sizing: border-box;
+        height: 42px;
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #2198f2;
+    }
+}
+
+table{
+    word-wrap: break-word;
+    word-break:break-all;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+// 兼容div 写法
+.table{
+    width: 100%;
+    margin-bottom:0!important;
+    .td,td{
+        padding: 8px;
+        line-height: 1.42857143;
+        word-wrap: break-word;
+        min-width: 80px !important;
+        a{
+            color:#2198f2;
+        }
+    }
+    .thead .tr{
+        overflow: hidden;
+    }
+    .tbody .tr{
+        @include clearfix;
+    }
+    .arrow-container{
+        float:right;
+        position: relative;
+        height: 24px;
+        width:10px;
+    }
+    .Icon-arrow-down{
+        @extend %Icon-arrow-down;
+        width:8px;
+        height:8px;
+        position: absolute;
+        bottom: 2px;
+        right: 0;
+        cursor:pointer;
+        &:hover{
+            border-color:#000;
+        }
+        &.active{
+            border-color:#000;
+        }
+    }
+    .Icon-arrow-up{
+        @extend %Icon-arrow-up;
+        width:8px;
+        height:8px;
+        position: absolute;
+        top: 2px;
+        right: 0;
+        cursor:pointer;
+        &.active{
+            border-color:#000;
+        }
+        &:hover{
+            border-color:#000;
+        }
+    }
+    thead, .thead{
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #2198f2;
+        .td,td{
+            position:relative;
+        }
+        .td:last-child:after,td:last-child:after{
+            width: 0;
+        }
+        .td:after,td:after{
+            position: absolute;
+            content: '';
+            right: 0;
+            top: 30%;
+            width: 1px;
+            height: 40%;
+            background-color: #ccc;
+        }
+    }
+
+    .tr:nth-of-type(2n+1),tr:nth-of-type(2n+1){
+        background-color: #f9f9f9;
+    }
+    .tr:hover,tr:hover{
+        background-color: #f2f2f2!important;
+    }
+}
+
+// page 分页
+.Page{
+    @include clearfix;
+    margin-right: 10px;
+}
+.Page-info{
+    line-height: 23px;
+    height: 23px;
+    float: left;
+    font-size: 14px;
+}
+.Page-item{
+    text-align: center;
+    height: 24px;
+    line-height: 24px;
+    min-width: 24px;
+    width: initial;
+    padding: 0 4px;
+    display: inline-block;
+    margin-left: 5px;
+    color:#25a4f6;
+    font-size: 14px;
+}
+.Page-item.cur{
+    background-color:#25a4f6;
+    color: #fff;
+    border-radius:4px;
+}
+.Page-nbr{
+    color:#25a4f6;
+}
+.Page-select{
+    width: initial !important;
+    height: 100%;
+    font-size: 12px;
+    line-height: 23px;
+    float: right;
+}
+.Page-disabled{
+    color: $text-color !important;
+}
+
+.DropDown {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    // float: right;
+    padding-left: 10px;
+    padding-right: 20px;
+    border-radius: 3px;
+    background-color: #fff;
+    border: 1px solid #d2d2d2;
+    min-width: 120px;
+    &.active{
+        border-top:1px solid #25a4f6;
+        border-left:1px solid #25a4f6;
+        border-right:1px solid #25a4f6;
+        .DropDown-list{
+            display: block;
+        }
+    }
+}
+.DropDown-info{
+    &.default{
+        color: $text-color-light;
+    }
+    display: inline-block;
+    height: 28px;
+    line-height: 28px;
+    width: 100%;
+    // min-width: 100px;
+    text-align: left;
+    color: $text-color;
+    font-size: 12px;
+    position: relative;
+    text-decoration: none;
+    &:hover{
+        color:$text-color;
+    }
+    &:after{
+        content: '';
+        position: absolute;
+        right: -12px;
+        top: 50%;
+        @extend .icon-triange
+    }
+}
+.DropDown-curtext{
+
+}
+
+.DropDown-list{
+    max-height: 300px;
+    overflow: auto;
+    display: none;
+    left: -1px;
+    right: -1px;
+    position: absolute;
+    z-index: 999;
+    left: -1px;
+    top: 28px;
+    background-color: #fff;
+    border-left: 1px solid #25a4f6;
+    border-right: 1px solid #25a4f6;
+    border-bottom: 1px solid #25a4f6;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+.DropDown-list-item{
+    line-height: 28px;
+    color: $text-color;
+    font-size: 12px;
+    text-align: left;
+    padding-left: 10px;
+    padding-right: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    &:hover{
+        color: #fff;
+        background-color: #25a4f6;
+    }
+}
+
+// 表格展开
+.icon-table-more{
+    cursor:pointer;
+    border-top: 2px solid #333;
+    border-right:2px solid #333;
+    height: 8px;
+    width: 8px;
+    display: inline-block;
+    transform: rotate(45deg);
+    &.active{
+        transform:rotateZ(135deg)
+    }
+}
+.tr-more{
+    background:#eee !important;
+}

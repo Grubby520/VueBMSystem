@@ -1,0 +1,101 @@
+// 重置插件 select
+.form-row{
+    margin-bottom: 28px;
+    width:100%;
+    .main{
+        position: relative;
+        overflow: visible;
+    }
+    .tip, .form-row-tip{
+        background:#e3edf5;
+        color:$text-color-light;
+        font-size:12px;
+        padding:4px;
+        // margin-top:4px;
+        text-align:left;
+        position: absolute;
+        width: 100%;
+        box-sizing:border-box;
+        &.error{
+          background:rgba(255,0,0,.1)
+        }
+    }
+    .tip-info{
+        display: block;
+    }
+}
+
+$input-default:300px;
+$input-mid:140px;
+$input-small:60px;
+
+.Icon-tip-primery, .Icon-tip-error{
+    margin-right: 4px;
+}
+
+.form-row-label{
+    font-weight: normal;
+    width: 110px;
+    color:#333;
+    display: inline-block;
+    i{
+        color:#f6881f;
+        font-style: normal;
+        margin-left: 4px;
+        vertical-align: sub;
+    }
+}
+
+input[type="file"]{
+    display: inline-block;
+}
+
+%input{
+    display: inline-block;
+    background:#fff;
+    height: 36px;
+    padding: 5px 20px 5px 10px;
+    font-size: 12px;
+    box-sizing: border-box;
+    border: 1px solid #b5b5b5;
+    transition:$transition-border;
+    // box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    &:focus{
+        border:1px solid #0288d1 !important;
+    }
+    &.radius{
+        border-radius:36px;
+    }
+}
+.input-text, .input-text-default{
+    @extend %input;
+    width:$input-default;
+}
+.input-text-mid{
+    @extend %input;
+    width:$input-mid;
+}
+.input-text-small{
+    @extend %input;
+    width:$input-small;
+}
+.select-default, .select{
+    width: $input-default;
+}
+.select-mid{
+    width: $input-mid;
+}
+.select-small{
+    width: $input-small;
+}
+
+.textarea{
+    width: $input-default;
+    height: 100px;
+    border: 1px solid #b5b5b5;
+    vertical-align: middle;
+    // box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    &:focus{
+        border:1px solid #0288d1;
+    }
+}
