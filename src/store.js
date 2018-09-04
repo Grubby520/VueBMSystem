@@ -133,7 +133,7 @@ export default new Vuex.Store({
         .catch((res) => {
           debugger
           console.log(res)
-          return throw new Error(res)
+          throw new Error(res)
         })
     },
     getMenueList ({commit, state}, params) {
