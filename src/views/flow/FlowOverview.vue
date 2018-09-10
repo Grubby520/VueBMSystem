@@ -182,7 +182,7 @@ import WRow from '@/components/common/WRow.vue'
 import Bubble from '@/assets/js/components/Bubble.js'
 import WTable from '@/components/common/WTable.vue'
 import NoData from '@/components/common/NoData.vue'
-import API from '@/assets/js/api.js'
+import API from '@/assets/js/api/api.js'
 import Util from '@/assets/js/util/util.js'
 import CountUp from '@/assets/js/lib/countUp-1.9.3.js'
 import menuMixin from '@/components/mixins/menu_mixin.js'
@@ -242,7 +242,8 @@ export default{
       page: 1,
       pageSize: 5,
       tableData: [],
-      curServerTime: +new Date()
+      curServerTime: +new Date(),
+      hasBubleData: true
     }
   },
   directives: {
@@ -380,6 +381,8 @@ export default{
                 $('.node-info').remove()
               }
               bubble.init()
+            } else {
+              vm.hasBubleData = false
             }
           })
           .catch(function (error) {
@@ -431,6 +434,8 @@ export default{
                 $('.node-info').remove()
               }
               bubble.init()
+            } else {
+              vm.hasBubleData = false
             }
           })
           .catch(function (error) {
@@ -524,7 +529,7 @@ export default{
       }
     },
     toPage (url) {
-      this.$router.push(url);
+      this.$router.push(url)
     }
   },
   components: {
@@ -581,6 +586,13 @@ export default{
         _that.toPage('/flow/analyze/detail')
       }
     })
+
+    $('#bubble')
+      .click(function() {
+        if (_that.hasBubleData) {
+          _that.toPage('/flow/analyze')
+        }
+      })
   }
 }
 </script>
@@ -665,6 +677,7 @@ export default{
   }
 
   .statistics-topic {
+    display: inline-block;
     margin: 1.15em 0.5em 0 0.5em;
     font-size: 14px;
     font-weight: 600;
@@ -721,6 +734,9 @@ export default{
       position: relative;
     }
 
+  .node {
+    cursor: pointer;
+  }
   .node-info {
       position: absolute;
       box-shadow: 0 0 10px #ccc;

@@ -32,7 +32,7 @@
               </el-date-picker>
 
               <div style="display: inline-block;margin-right: 6px;vertical-align:middle">
-                <w-select :placeholder="this.userInfo.roleLevel == 1 || this.userInfo.roleLevel == 2 ? '查询所有部门':'查询所有业务系统'" filterable v-model="value" ref="select" :list="selectList"></w-select>
+                <w-select :placeholder="this.userInfo.roleLevel == 1 || this.userInfo.roleLevel == 2 ? '查询所有单位':'查询所有业务系统'" filterable v-model="value" ref="select" :list="selectList"></w-select>
               </div>
               <base-button-group>
                 <base-button @click="getTableList(1)">查询</base-button>
@@ -98,7 +98,7 @@ import BaseButtonGroup from '@/components/common/base/BaseButtonGroup.vue'
 import WSelect from '@/components/common/select/WSelect.vue'
 import { mapState } from 'vuex'
 import { dateFormat } from '@/assets/js/components/utility.js'
-import { urls } from '@/assets/js/api.js'
+import { urls } from '@/assets/js/api/api.js'
 import WMessage from '@/components/common/message/index.js'
 import menuMixin from '@/components/mixins/menu_mixin.js'
 export default{

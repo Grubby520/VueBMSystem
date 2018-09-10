@@ -125,7 +125,7 @@
 <script>
 import menuMixin from '@/components/mixins/menu_mixin.js'
 import Charts from '@/assets/js/components/chartsFun.js'
-import API from '@/assets/js/api.js'
+import API from '@/assets/js/api/api.js'
 import Util from '@/assets/js/util/util.js'
 import WTabs from '@/components/common/WTabs.vue'
 import WTable from '@/components/common/WTable.vue'
@@ -169,7 +169,15 @@ export default {
     BaseButton,
     BaseButtonGroup
   },
+  created() {
+    this.init()
+  },
   methods: {
+    init() {
+      this.getResCapacotuVirtualList()
+      this.getResLoadPhyResList()
+      this.getResLoadTrendResPoolList()
+    },
     handleClick (tab, event) {
       console.log(tab, event)
     },
@@ -219,14 +227,41 @@ export default {
     },
     toResLoadPage: function (id) {
 
+    },
+    // 资源池及对应单位和应用列表
+    // 资源池容量信息
+    getResCapacityVirtualList () {
+      API.getResCapacotuVirtualList(this)
+        .then(res => {
+          console.log('//资源池容量信息')
+          console.log(res)
+        })
+    },
+    // 物理资源负载信息
+    getResLoadPhyResList () {
+      API.getResLoadPhyResList(this)
+        .then(res => {
+          console.log('//物理资源负载信息')
+          console.log(res)
+        })
+    },
+    // 资源池负载趋势信息
+    getResLoadTrendResPoolList () {
+      API.getResLoadTrendResPoolList(this, {
+        resourcePoolId: ''
+      })
+        .then(res => {
+          console.log('//资源池负载趋势信息')
+          console.log(res)
+        })
     }
   },
   directives: {
     'echarts-line': {
       'inserted': function (el, binding) {
-        let data = binding.value,
-          id = el.id,
-          status = el.getAttribute('data-status')
+        let data = binding.value
+        let id = el.id
+        let status = el.getAttribute('data-status')
 
         if (!data) {
           data = 'nodata'
@@ -263,10 +298,7 @@ export default {
     },
     'echarts-radar': {
       'inserted': function (el, binding) {
-        let data = binding.value,
-          id = el.id,
-          status = el.getAttribute('data-status')
-
+        let [data, id, status] = [binding.value, el.id, el.getAttribute('data-status')]
         if (!data || data.length == 0) {
           data = 'nodata'
         }

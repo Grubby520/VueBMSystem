@@ -1,97 +1,125 @@
 <template>
   <div>
-    <el-row :gutter="15">
-      <el-col :span="24">
-        <w-table>
-          <template slot="title">单位流量列表</template>
-          <template slot="opt">
-            <div style="display: inline-block;margin-right: 6px;">
-              <w-select filterable v-model="orgId" ref="select" :list="orgList"></w-select>
+    <el-row :gutter="15" style="overflow:hidden;">
+      <el-col :span="6">
+        <div class="nav__container whiteBg" v-init-screen-h="125" style="padding-bottom:20000px;margin-bottom:-20000px">
+          <div class="nav-logo"><span class="pageIconFont icon-organization"></span></div>
+          <div class="nav-content">
+            <h1 class="page-portrait" id="chooseBtn">
+              {{curOrgName}}
+              <span v-if="isAdminRole()" class="pageIconFont icon-triangle-bottom page-portrait-icon"></span>
+            </h1>
+            <w-dropdown
+              v-if="isAdminRole()"
+              @item-click="itemClickHandle"
+              :itemlist="orgList"
+              :placeholder="placeholder"
+              :nodatatext="nodatatext"
+              :show="showDropDown"></w-dropdown>
+
+            <div class="applist__container">
+              <w-dropdown-ext style="margin-top:1em;"
+              @item-click="appClickHandle"
+              :show="true"
+              :itemlist="appList"
+              :placeholder="placeholder1"
+              :nodatatext="nodatatext1"
+              :add-icon="true"
+              :has-status="true"
+              icon-class="pageIconFont icon-webpage"
+              status-icon-type="text"
+              :item-text-style="{width:'75%'}"></w-dropdown-ext>
             </div>
-            <base-button-group>
-              <base-button @click="searchFn">查询</base-button>
-            </base-button-group>
-          </template>
-          <template slot="table-list">
-            <div>
-              <el-table
-                  :data="orgFlowList"
-                  stripe
-                  style="width: 100%">
-                  <el-table-column
-                    type="index"
-                    label="ID">
-                  </el-table-column>
-                  <el-table-column
-                    prop="orgName"
-                    label="单位">
-                    <template slot-scope="scope">
-                      <router-link :to="'/flow/analyze/detail/'+scope.row.orgId" class="a_link to_detail">
-                        {{scope.row.orgName}}
-                      </router-link>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    prop="flowAll"
-                    label="总流量(GB)">
-                  </el-table-column>
-                  <el-table-column
-                    prop="flowAbnormal"
-                    label="异常流量(GB)">
-                    <template slot-scope="scope">
-                      <router-link v-if="scope.row.flowAbnormal > 0" :to="'/flow/event'" class="a_link to_abnormal">
-                        {{scope.row.flowAbnormal}}
-                      </router-link>
-                      <span v-else>{{scope.row.flowAbnormal}}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    prop="ipAll"
-                    label="总IP数">
-                  </el-table-column>
-                  <el-table-column
-                    prop="businessAll"
-                    label="总业务数">
-                  </el-table-column>
-                  <el-table-column
-                    prop="businessAbnormal"
-                    label="异常流量业务系统数">
-                    <template slot-scope="scope">
-                      <span class="a_link to_abnormal">{{scope.row.businessAbnormal}}</span>
-                    </template>
-                  </el-table-column>
-              </el-table>
-              <el-pagination
-                  v-show="total > pageSize"
-                  @current-change="currentChange"
-                  :current-page="page"
-                  :page-size="pageSize"
-                  layout="total, prev, pager, next, jumper"
-                  :total="total">
-              </el-pagination>
+
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="18">
+        <div class="whiteBg" style="padding-bottom:20000px;margin-bottom:-20000px">
+          <div class="content-header">
+            <label>{{curBusinessName}}</label><!--<span>网址:{{curIp}}</span>-->
+          </div>
+          <div class="flex-layout" style="margin: 0 20px;">
+            <div class="flex-layout flex-item-row flex-space-1 content-statistic-module">
+              <h1>当前流量(一小时)</h1>
+              <div class="flex-layout flow-content">
+                <div class="flex-space-1">
+                  <div class="flow-num" id="curTotalFlows">{{curFlow.flowAll | exceptionFilter}}</div>
+                  <span class="flow-text">总流量(GB)</span>
+                </div>
+                <div class="flex-space-1">
+                  <div class="flow-num exception to-abnormal" id="curExceptionFlows">{{curFlow.flowAbnormal | exceptionFilter}}</div>
+                  <span class="flow-text">异常流量(GB)</span>
+                </div>
+              </div>
             </div>
-          </template>
-        </w-table>
+            <div class="flex-layout flex-item-row flex-space-1 content-statistic-module" style="margin-right:15px;">
+              <h1>本月流量</h1>
+              <div class="flex-layout flow-content">
+                <div class="flex-space-1">
+                  <div class="flow-num" id="monthTotalFlows">{{monthFlow.flowAll | exceptionFilter}}</div>
+                  <span class="flow-text">总流量(GB)</span>
+                </div>
+                <div class="flex-space-1">
+                  <div class="flow-num exception to-abnormal" id="monthExceptionFlows">{{monthFlow.flowAbnormal | exceptionFilter}}</div>
+                  <span class="flow-text">异常流量(GB)</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex-layout flex-item-row flex-space-2 content-statistic-module">
+              <h1>日常流量高峰</h1>
+              <div style="height:100px;overflow:hidden;">
+                <el-scrollbar style="height:100%;" wrapStyle="overflow-x: hidden;">
+                  <ul class="hisflow-analysis">
+                    <li v-for="(item,index) in dailyFlowEstimate" :key="index">【{{item.extremeStart}}-{{item.extremeEnd}}】{{item.extremeDescription}}</li>
+                    <li v-if="dailyFlowEstimate.length == 0">暂无数据...</li>
+                  </ul>
+                </el-scrollbar>
+              </div>
+
+            </div>
+			   	</div>
+          <el-row :gutter="15">
+            <el-col :span="12">
+              <div style="margin-left:20px;">
+                <w-title>流量-时间分布(一个月)</w-title>
+                <div v-if="hasFlowTimeDis">
+                  <div class="charts" id="flowTimeDis"></div>
+                </div>
+                <div v-else class="charts">
+                  <no-data></no-data>
+                </div>
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <div style="margin-right:20px;">
+                <w-title>流量-地域分布(一个月)</w-title>
+                <div v-if="hasFlowAreaDis">
+                  <div class="charts" id="flowAreaDis"></div>
+                </div>
+                <div v-else class="charts">
+                  <no-data></no-data>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row>
+              <el-col :span="24">
+                <div style="margin:0 20px;">
+                  <w-title>流量趋势(一个月)</w-title>
+                  <div v-if="hasFlowTrend">
+                    <div class="charts" id="flowTrend"></div>
+                  </div>
+                  <div v-else class="charts">
+                    <no-data></no-data>
+                  </div>
+                </div>
+              </el-col>
+          </el-row>
+        </div>
       </el-col>
     </el-row>
-    <el-row :gutter="15" class="mt15">
-      <el-col :span="12">
-        <w-row>
-          <template slot="title">总流量top5的单位</template>
-          <div slot="content">
-            <w-top5 :toplist="flowAllOrgTopList"></w-top5>
-          </div>
-        </w-row>
-      </el-col>
-      <el-col :span="12">
-        <w-row>
-          <template slot="title">异常流量top5的单位</template>
-          <div slot="content">
-            <w-top5 :toplist="flowAbnormalOrgTopList"></w-top5>
-          </div>
-        </w-row>
-      </el-col>
-    </el-row>
+
   </div>
 </template>
 <script>
@@ -100,7 +128,7 @@ import WDropdown from '@/components/common/WDropdown.vue'
 import WDropdownExt from '@/components/common/WDropdownExt.vue'
 import WTitle from '@/components/common/WTitle.vue'
 import NoData from '@/components/common/NoData.vue'
-import API from '@/assets/js/api.js'
+import API from '@/assets/js/api/api.js'
 import Util from '@/assets/js/util/util.js'
 import Helper from '@/assets/js/util/helper.js'
 import CountUp from '@/assets/js/lib/countUp-1.9.3.js'
@@ -488,12 +516,12 @@ export default {
   created () {
     let vm = this
     API.getServerTime(vm)
-      .then(function (res) {
+      .then(function(res) {
         if (res.data && res.data.body) {
           vm.curServerTime = res.data.body.systemCurrentTimeMillis
         }
       })
-      .catch(function (error) {
+      .catch(function(error) {
         console.log(error)
       })
   },

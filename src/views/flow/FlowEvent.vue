@@ -17,7 +17,9 @@
             <div id="flow_event_table">
               <el-table
                   :data="tableData"
+                  ref="multipleTable"
                   @selection-change="handleSelectionChange"
+                  @select="selectEventFn"
                   stripe
                   style="width: 100%">
                   <el-table-column
@@ -115,7 +117,7 @@ import BaseButtonGroup from '@/components/common/base/BaseButtonGroup.vue'
 import WTop5 from '@/components/common/WTop5.vue'
 import WRow from '@/components/common/WRow.vue'
 import { mapMutations, mapState } from 'vuex'
-import { urls } from '@/assets/js/api.js'
+import { urls } from '@/assets/js/api/api.js'
 import menuMixin from '@/components/mixins/menu_mixin.js'
 import xhr from '@/assets/js/components/utility.js'
 let time = new Date()
@@ -151,10 +153,6 @@ export default{
     this.getTableList()
     this.getApps()
     this.getTop5()
-    this.setCrumbs(this.crumbs)
-    // this.$nextTick(()=>{
-    //   this.getDetail()
-    // })
   },
   computed: {
     ...mapState['userInfo']
@@ -230,8 +228,8 @@ export default{
       if (this.multipleSelection.length === 0) return
       let params = this.multipleSelection.map((item) => {
         return {
-          srcIp: item.ip,
-          srcPort: item.port,
+          srcIp: item.srcIp,
+          srcPort: item.srcPort,
           type: item.type
         }
       })
@@ -313,11 +311,30 @@ export default{
       this.getTableList(val)
     },
     handleSelectionChange (val) {
+      let _that = this;
       console.log('val:' + JSON.stringify(val))
+      val.forEach(function(row){
+        if(row.typeCode == 'overseas_visits'){
+          _that.$refs.multipleTable.toggleRowSelection(row,false);
+          WMessage({
+            message: '境外访问流量不能被标记',
+            type: 'info'
+          })
+          return false;
+        }
+      });
       this.multipleSelection = val
     },
+    selectEventFn(selection, row){
+      if(row.typeCode == 'overseas_visits'){
+        this.$refs.multipleTable.toggleRowSelection(row,false);
+        WMessage({
+          message: '境外访问流量不能被标记',
+          type: 'info'
+        })
+      }
+    },
     ...mapMutations([
-      'setCrumbs',
       'userInfo'
     ])
   },

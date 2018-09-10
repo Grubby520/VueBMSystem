@@ -76,7 +76,7 @@
   </page-content>
 </template>
 <script>
-import API from '@/assets/js/api.js'
+import API from '@/assets/js/api/api.js'
 import Util from '@/assets/js/util/util.js'
 import WTabs from '@/components/common/WTabs.vue'
 import WTable from '@/components/common/WTable.vue'
@@ -85,38 +85,38 @@ import BaseButtonGroup from '@/components/common/base/BaseButtonGroup.vue'
 import WSelect from '@/components/common/select/WSelect.vue'
 import menuMixin from '@/components/mixins/menu_mixin.js'
 export default {
-  //mixins:[menuMixin],
+  // mixins:[menuMixin],
   data () {
     return {
       crumbs: [{
         iconClass: 'iconfont icon-operationAdministration',
         name: '运维管理'
-      },{
+      }, {
         iconClass: 'iconfont icon-Notice-management',
         name: '告警管理'
-      },{
+      }, {
         iconClass: '',
         name: '告警事件'
       }],
-      activeName:'flow-alarm',
-      flowStartDate:null,
-      flowEndDate:null,
-      flowAlarmLevel:'',
+      activeName: 'flow-alarm',
+      flowStartDate: null,
+      flowEndDate: null,
+      flowAlarmLevel: '',
       total: 0,
       page: 1,
       pageSize: 20,
-      flowAlarmList:[],
-      alarmLevelList:[{
-        id:'0',
-        name:'严重'
-      },{
-        id:'1',
-        name:'一般'
-      },{
-        id:'2',
-        name:'轻微'
+      flowAlarmList: [],
+      alarmLevelList: [{
+        id: '0',
+        name: '严重'
+      }, {
+        id: '1',
+        name: '一般'
+      }, {
+        id: '2',
+        name: '轻微'
       }]
-    };
+    }
   },
   components: {
     WTabs,
@@ -125,55 +125,55 @@ export default {
     BaseButtonGroup,
     WSelect
   },
-  computed:{
-    
+  computed: {
+
   },
   methods: {
     handleClick(tab, event) {
-      console.log(tab, event);
+      console.log(tab, event)
     },
     currentChange: function (curPage) {
       this.page = curPage
       this.getAlarmList()
     },
     getAlarmList () {
-      let vm = this;
+      let vm = this
       API.getAlarmList(vm, {
-        page: vm.page, 
+        page: vm.page,
         pageSize: vm.pageSize,
-        levelCode:vm.flowAlarmLevel,
-        timeStart:vm.flowStartDate?Util.dateFormat(vm.flowStartDate,'yyyy-MM-dd hh:mm:ss'):vm.flowStartDate,
-        timeEnd:vm.flowEndDate?Util.dateFormat(vm.flowEndDate,'yyyy-MM-dd hh:mm:ss'):vm.flowEndDate
+        levelCode: vm.flowAlarmLevel,
+        timeStart: vm.flowStartDate ? Util.dateFormat(vm.flowStartDate, 'yyyy-MM-dd hh:mm:ss') : vm.flowStartDate,
+        timeEnd: vm.flowEndDate ? Util.dateFormat(vm.flowEndDate, 'yyyy-MM-dd hh:mm:ss') : vm.flowEndDate
       })
-      .then(function (res) {
-        if (res.data && res.data.body) {
-          vm.total = res.data.body.total
-          vm.page = res.data.body.page
-          vm.pageSize = res.data.body.pageSize
-          vm.flowAlarmList = res.data.body.data
-        }
-      })
+        .then(function (res) {
+          if (res.data && res.data.body) {
+            vm.total = res.data.body.total
+            vm.page = res.data.body.page
+            vm.pageSize = res.data.body.pageSize
+            vm.flowAlarmList = res.data.body.data
+          }
+        })
     },
-    loadAlarmList(){
-      let vm = this;
-      vm.page = 1;
-      this.getAlarmList();
+    loadAlarmList() {
+      let vm = this
+      vm.page = 1
+      this.getAlarmList()
     },
-    dateChange(){
-      let timeStart = this.flowStartDate?Util.dateFormat(this.flowStartDate,'yyyy-MM-dd hh:mm:ss'):this.flowStartDate,
-          flowEndDate = this.flowEndDate?Util.dateFormat(this.flowEndDate,'yyyy-MM-dd hh:mm:ss'):this.flowEndDate;
-     
-      if(timeStart && flowEndDate) {
-        if(timeStart > flowEndDate){
-          this.$message.error('开始时间不能大于结束时间');
-          this.flowStartDate = null;
-          this.flowEndDate = null;
+    dateChange() {
+      let timeStart = this.flowStartDate ? Util.dateFormat(this.flowStartDate, 'yyyy-MM-dd hh:mm:ss') : this.flowStartDate,
+        flowEndDate = this.flowEndDate ? Util.dateFormat(this.flowEndDate, 'yyyy-MM-dd hh:mm:ss') : this.flowEndDate
+
+      if (timeStart && flowEndDate) {
+        if (timeStart > flowEndDate) {
+          this.$message.error('开始时间不能大于结束时间')
+          this.flowStartDate = null
+          this.flowEndDate = null
         }
       }
     }
   },
-  mounted(){
-    //this.getAlarmList();
+  mounted() {
+    // this.getAlarmList();
   }
 }
 </script>
@@ -207,4 +207,3 @@ export default {
     }
   }
 </style>
-

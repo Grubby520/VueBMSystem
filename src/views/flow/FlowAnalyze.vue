@@ -106,7 +106,7 @@ import WTable from '@/components/common/WTable.vue'
 import WSelect from '@/components/common/select/WSelect.vue'
 import BaseButton from '@/components/common/base/BaseButton.vue'
 import BaseButtonGroup from '@/components/common/base/BaseButtonGroup.vue'
-import API from '@/assets/js/api.js'
+import API from '@/assets/js/api/api.js'
 import Util from '@/assets/js/util/util.js'
 import menuMixin from '@/components/mixins/menu_mixin.js'
 export default{

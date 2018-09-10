@@ -106,7 +106,7 @@ import BaseButtonGroup from '@/components/common/base/BaseButtonGroup.vue'
 import WTop5 from '@/components/common/WTop5.vue'
 import WRow from '@/components/common/WRow.vue'
 import { mapMutations, mapState } from 'vuex'
-import { urls } from '@/assets/js/api.js'
+import { urls } from '@/assets/js/api/api.js'
 import menuMixin from '@/components/mixins/menu_mixin.js'
 import xhr from '@/assets/js/components/utility.js'
 let time = new Date()

@@ -9,25 +9,25 @@
               <div slot="content">
                 <div class="table-block table-column-2">
                   <div class="table-cell">
-                    <div class="data-icon" v-show="false">
+                    <div class="data-icon" v-if="resCapacityPhy.capacityStatus == '不充足'">
                       <svg class="icon" aria-hidden="true">
                         <use xlink:href="#icon-vm-shortage"></use>
                       </svg>
                     </div>
-                    <div class="data-icon" v-show="true">
+                    <div class="data-icon" v-else>
                       <svg class="icon" aria-hidden="true">
                         <use xlink:href="#icon-vm-abundant"></use>
                       </svg>
                     </div>
                     <div class="data-status">
-                      <span class="_fix label-btn" :class="{enough:true}">充足</span>
+                      <span class="_fix label-btn" :class=" resCapacityPhy.capacityStatus === '充足' ? 'good' : 'bad' ">{{resCapacityPhy.capacityStatus}}</span>
                       <p>剩余容量</p>
                     </div>
                   </div>
                   <div class="table-cell">
                     <div class="data-icon"><span class="pageIconFont icon-vm ft-30"></span></div>
                     <div class="data-status">
-                      <span class="normal-number ft-12"><span class="ft-20" v-num-animation="10">10</span>个</span>
+                      <span class="normal-number ft-12"><span class="ft-20" v-num-animation="resCapacityPhy.allocatedVmQuantity">{{resCapacityPhy.allocatedVmQuantity}}</span>个</span>
                       <p>可分配云主机</p>
                     </div>
                   </div>
@@ -43,14 +43,14 @@
                   <div class="table-cell">
                     <div class="data-icon"><span class="pageIconFont icon-warm-high ft-30"></span></div>
                     <div class="data-status">
-                      <span class="normal-number ft-12"><span class="ft-20" v-num-animation="10">10</span>个</span>
+                      <span class="normal-number ft-12"><span class="ft-20" v-num-animation="resInstanceStatistics.statusHighInstanceCount">{{resInstanceStatistics.statusHighInstanceCount}}</span>个</span>
                       <p>配置过高云主机</p>
                     </div>
                   </div>
                   <div class="table-cell">
                     <div class="data-icon"><span class="pageIconFont icon-low-deploy-vm ft-30"></span></div>
                     <div class="data-status">
-                      <span class="normal-number ft-12"><span class="ft-20" v-num-animation="10">10</span>个</span>
+                      <span class="normal-number ft-12"><span class="ft-20" v-num-animation="resInstanceStatistics.statusLowInstanceCount">{{resInstanceStatistics.statusLowInstanceCount}}</span>个</span>
                       <p>配置过低云主机</p>
                     </div>
                   </div>
@@ -63,20 +63,22 @@
               <template slot="title">负载预警</template>
               <div slot="content">
                 <div class="table-block table-column-2">
-                  <div class="table-cell">
-                    <div class="data-icon"><span class="pageIconFont icon-respool ft-30"></span></div>
-                    <div class="data-status">
-                      <span class="abnormal-number ft-12" style="margin-right:0.5em;vertical-align:middle;"><span class="ft-20">98</span>%</span>
-                      <span class="label-btn" :class="{enough:true}">高</span>
-                      <p>互联网资源池</p>
+                  <div class="table-cell" v-for="item in resLoadPhyResList" :key="item.type">
+                    <div v-if="item.type == 'inner'">
+                      <div class="data-icon"><span class="pageIconFont icon-respool ft-30"></span></div>
+                      <div class="data-status">
+                        <span class="abnormal-number ft-12" style="margin-right:0.5em;vertical-align:middle;" :style="{color: item.color}"><span class="ft-20">{{parseInt(item.loadRate*100)}}</span>%</span>
+                        <span class="label-btn" :class="item.className">{{item.loadEvaluation}}</span>
+                        <p>互联网资源池</p>
+                      </div>
                     </div>
-                  </div>
-                  <div class="table-cell">
-                    <div class="data-icon"><span class="pageIconFont icon-respool ft-30"></span></div>
-                    <div class="data-status">
-                      <span class="abnormal-number ft-12" style="margin-right:0.5em;vertical-align:middle;"><span class="ft-20">98</span>%</span>
-                      <span class="label-btn" :class="{enough:true}">高</span>
-                      <p>政务外网资源池</p>
+                    <div v-else-if="item.type == 'external'">
+                      <div class="data-icon"><span class="pageIconFont icon-respool ft-30"></span></div>
+                      <div class="data-status">
+                        <span class="abnormal-number ft-12" style="margin-right:0.5em;vertical-align:middle;" :style="{color: item.color}"><span class="ft-20">{{parseInt(item.loadRate*100)}}</span>%</span>
+                        <span class="label-btn" :class="item.className">{{item.loadEvaluation}}</span>
+                        <p>政务外网资源池</p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -84,34 +86,34 @@
             </w-row>
           </div>
         </div>
-        <div class="mt15">
+        <div class="mt15" v-if="baseRegionList.inner">
           <w-row>
             <template slot="title">互联网资源池容量</template>
-            <div slot="content">
-              <div class="table-block table-column-4">
+            <div slot="content" v-for="item in baseRegionList.capacityPoolList" :key='item.regionType'>
+              <div class="table-block table-column-4" v-if="item.regionType == 'inner'">
                 <div class="table-cell respool-module capacity">
                   <h3>CPU</h3>
                   <p class="clearfix">
                     <label>已使用/总量</label>
-                    <span class="normal-number right">4/32<i>核</i></span>
+                    <span class="normal-number right" :style="{color: item.cpuClassName}">{{item.cpuUsed}}/{{item.cpu}}<i>核</i></span>
                   </p>
-                  <el-progress :percentage="80" color="#8e71c7" :show-text="false"></el-progress>
+                  <el-progress :percentage="parseInt(100*item.cpuRate)" :color="item.cpuClassName" :show-text="false"></el-progress>
                 </div>
                 <div class="table-cell respool-module capacity">
-                  <h3>CPU</h3>
+                  <h3>内存</h3>
                   <p class="clearfix">
                     <label>已使用/总量</label>
-                    <span class="normal-number right">4/32<i>核</i></span>
+                    <span class="normal-number right" :style="{color: item.memoryClassName}">{{item.memoryUsed}}/{{item.memory}}<i>核</i></span>
                   </p>
-                  <el-progress :percentage="80" color="#8e71c7" :show-text="false"></el-progress>
+                  <el-progress :percentage="parseInt(100*item.memoryRate)" :color="item.memoryClassName" :show-text="false"></el-progress>
                 </div>
                 <div class="table-cell respool-module capacity">
-                  <h3>CPU</h3>
+                  <h3>存储</h3>
                   <p class="clearfix">
                     <label>已使用/总量</label>
-                    <span class="normal-number right">4/32<i>核</i></span>
+                    <span class="normal-number right" :style="{color: item.storageClassName}">{{item.memoryUsed}}/{{item.storage}}<i>核</i></span>
                   </p>
-                  <el-progress :percentage="80" color="#8e71c7" :show-text="false"></el-progress>
+                  <el-progress :percentage="parseInt(100*item.storageRate)" :color="item.storageClassName" :show-text="false"></el-progress>
                 </div>
                 <div class="table-cell"></div>
               </div>
@@ -119,23 +121,135 @@
           </w-row>
           <w-row>
             <template slot="title">互联网资源池负载</template>
-            <div slot="content">
-              <div class="table-block table-column-4">
-                <div class="table-cell respool-module load">
-                  <p class="clearfix">
-                    <label>计算器服务</label>
-                    <span class="normal-number ft-20 right">98<i>%</i></span>
-                  </p>
-                  <p class="clearfix ft-12">
-                    <span class="label-btn middle">当前负载正常</span>
-                    <span class="right">(比昨日↑5%)</span>
-                  </p>
+            <div slot="content" v-for="item in netAreaResPool" :key='item.regionType'>
+              <div class="table-block table-column-4" v-if="item.regionType == 'inner'">
+                <div v-for="inner in item.data" :key='inner.name'>
+                  <div class="table-cell respool-module load" v-if="inner.name = 'service'">
+                    <p class="clearfix">
+                      <label>计算器服务</label>
+                      <span class="normal-number ft-20 right">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
+                    </p>
+                    <p class="clearfix ft-12">
+                      <span class="label-btn middle">当前负载{{inner.loadEvaluation}}</span>
+                      <span class="right">(比昨日{{inner.loadCompare}})</span>
+                    </p>
+                  </div>
+                  <!-- <div class="table-cell respool-module load" v-if="inner.name = 'storage'">
+                    <p class="clearfix">
+                      <label>存储服务器</label>
+                      <span class="normal-number ft-20 right">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
+                    </p>
+                    <p class="clearfix ft-12">
+                      <span class="label-btn middle">当前负载{{inner.loadEvaluation}}</span>
+                      <span class="right">(比昨日{{inner.loadCompare}})</span>
+                    </p>
+                  </div>
+                  <div class="table-cell respool-module load" v-if="inner.name = 'device'">
+                    <p class="clearfix">
+                      <label>存储设备</label>
+                      <span class="normal-number ft-20 right">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
+                    </p>
+                    <p class="clearfix ft-12">
+                      <span class="label-btn middle">当前负载{{inner.loadEvaluation}}</span>
+                      <span class="right">(比昨日{{inner.loadCompare}})</span>
+                    </p>
+                  </div>
+                  <div class="table-cell respool-module load" v-if="inner.name = 'network'">
+                    <p class="clearfix">
+                      <label>网络出口宽带</label>
+                      <span class="normal-number ft-20 right">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
+                    </p>
+                    <p class="clearfix ft-12">
+                      <span class="label-btn middle">当前负载{{inner.loadEvaluation}}</span>
+                      <span class="right">(比昨日{{inner.loadCompare}})</span>
+                    </p>
+                  </div> -->
                 </div>
-                <div class="table-cell respool-module load"></div>
-                <div class="table-cell respool-module load"></div>
-                <div class="table-cell respool-module load"></div>
               </div>
             </div>
+          </w-row>
+        </div>
+        <div class="mt15" v-if="baseRegionList.external">
+          <w-row>
+            <template slot="title">政务外网资源池容量</template>
+            <div slot="content" v-for="item in baseRegionList.capacityPoolList" :key='item.regionType'>
+              <div class="table-block table-column-4" v-if="item.regionType == 'external'">
+                <div class="table-cell respool-module capacity">
+                  <h3>CPU</h3>
+                  <p class="clearfix">
+                    <label>已使用/总量</label>
+                    <span class="normal-number right" :style="{color: item.cpuClassName}">{{item.cpuUsed}}/{{item.cpu}}<i>核</i></span>
+                  </p>
+                  <el-progress :percentage="parseInt(100*item.cpuRate)" :color="item.cpuClassName" :show-text="false"></el-progress>
+                </div>
+                <div class="table-cell respool-module capacity">
+                  <h3>内存</h3>
+                  <p class="clearfix">
+                    <label>已使用/总量</label>
+                    <span class="normal-number right" :style="{color: item.memoryClassName}">{{item.memoryUsed}}/{{item.memory}}<i>核</i></span>
+                  </p>
+                  <el-progress :percentage="parseInt(100*item.memoryRate)" :color="item.memoryClassName" :show-text="false"></el-progress>
+                </div>
+                <div class="table-cell respool-module capacity">
+                  <h3>存储</h3>
+                  <p class="clearfix">
+                    <label>已使用/总量</label>
+                    <span class="normal-number right" :style="{color: item.storageClassName}">{{item.memoryUsed}}/{{item.storage}}<i>核</i></span>
+                  </p>
+                  <el-progress :percentage="parseInt(100*item.storageRate)" :color="item.storageClassName" :show-text="false"></el-progress>
+                </div>
+                <div class="table-cell"></div>
+              </div>
+            </div>
+          </w-row>
+          <w-row>
+            <template slot="title">政务外网资源池负载</template>
+            <!-- <div slot="content" v-for="item in netAreaResPool" :key='item.regionType'>
+              <div class="table-block table-column-4" v-if="item.regionType == 'external'">
+                <div v-for="inner in item.data" :key='inner.name'>
+                  <div class="table-cell respool-module load" v-if="inner.name = 'service'">
+                    <p class="clearfix">
+                      <label>计算器服务</label>
+                      <span class="normal-number ft-20 right">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
+                    </p>
+                    <p class="clearfix ft-12">
+                      <span class="label-btn middle">当前负载{{inner.loadEvaluation}}</span>
+                      <span class="right">(比昨日{{inner.loadCompare}})</span>
+                    </p>
+                  </div>
+                  <div class="table-cell respool-module load" v-if="inner.name = 'storage'">
+                    <p class="clearfix">
+                      <label>存储服务器</label>
+                      <span class="normal-number ft-20 right">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
+                    </p>
+                    <p class="clearfix ft-12">
+                      <span class="label-btn middle">当前负载{{inner.loadEvaluation}}</span>
+                      <span class="right">(比昨日{{inner.loadCompare}})</span>
+                    </p>
+                  </div>
+                  <div class="table-cell respool-module load" v-if="inner.name = 'device'">
+                    <p class="clearfix">
+                      <label>存储设备</label>
+                      <span class="normal-number ft-20 right">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
+                    </p>
+                    <p class="clearfix ft-12">
+                      <span class="label-btn middle">当前负载{{inner.loadEvaluation}}</span>
+                      <span class="right">(比昨日{{inner.loadCompare}})</span>
+                    </p>
+                  </div>
+                  <div class="table-cell respool-module load" v-if="inner.name = 'network'">
+                    <p class="clearfix">
+                      <label>网络出口宽带</label>
+                      <span class="normal-number ft-20 right">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
+                    </p>
+                    <p class="clearfix ft-12">
+                      <span class="label-btn middle">当前负载{{inner.loadEvaluation}}</span>
+                      <span class="right">(比昨日{{inner.loadCompare}})</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div> -->
           </w-row>
         </div>
       </el-col>
@@ -173,6 +287,7 @@ import CountUp from '@/assets/js/lib/countUp-1.9.3.js'
 import menuMixin from '@/components/mixins/menu_mixin.js'
 import WRow from '@/components/common/WRow.vue'
 import WProgressBar from '@/components/common/WProgressBar.vue'
+import API from '@/assets/js/api/api.js'
 export default {
   mixins: [menuMixin],
   components: {
@@ -188,6 +303,30 @@ export default {
         iconClass: 'iconfont icon-resouce_overview-management',
         name: '资源概览'
       }],
+      resCapacityPhy: {
+        allocatedVmQuantity: 0,
+        capacityStatus: '充足'
+      },
+      resInstanceStatistics: {
+        statusHighInstanceCount: 0,
+        statusLowInstanceCount: 0
+      },
+      resLoadPhyResList: [
+        {
+          loadEvaluation: '高',
+          loadRate: '0.86',
+          className: 'bad',
+          name: '互联网资源池',
+          type: 'inner'
+        },
+        {
+          loadEvaluation: '中',
+          loadRate: '0.62',
+          className: 'normal',
+          name: '政务外网资源池',
+          type: 'external'
+        }
+      ],
       assetsList: [
         {
           code: '',
@@ -218,18 +357,259 @@ export default {
           href: '/resource/overview',
           icon: 'icon-device-safety'
         }
+      ],
+      baseRegionList: {
+        inner: false,
+        external: false,
+        capacityPoolList: [
+          {
+            cpu: 20,
+            cpuUsed: 10,
+            cpuRate: 0.9,
+            memory: 30,
+            memoryUsed: 2,
+            memoryRate: 0.9,
+            storage: 60,
+            storageUsed: 11,
+            storageRate: 0.9,
+            regionType: 'inner'
+          },
+          {
+            cpu: 20,
+            cpuUsed: 10,
+            cpuRate: 0.9,
+            memory: 30,
+            memoryUsed: 2,
+            memoryRate: 0.9,
+            storage: 60,
+            storageUsed: 11,
+            storageRate: 0.9,
+            regionType: 'external'
+          }
+        ]
+      },
+      netAreaResPool: [
+        {
+          'regionId': 'r-01',
+          'regionName': '政务外网资源池',
+          'regionType': 'inner',
+          'data': [
+            {
+              'name': 'network',
+              'loadRate': 0.32,
+              'loadEvaluation': '低',
+              'loadCompare': -0.6
+            },
+            {
+              'name': 'storage',
+              'loadRate': 0.52,
+              'loadEvaluation': '高',
+              'loadCompare': +0.4
+            },
+            {
+              'name': 'service',
+              'loadRate': 0.36,
+              'loadEvaluation': '低',
+              'loadCompare': -0.2
+            },
+            {
+              'name': 'device',
+              'loadRate': 0.32,
+              'loadEvaluation': '低',
+              'loadCompare': -0.2
+            }
+          ]
+        },
+        {
+          'regionId': 'r-02',
+          'regionName': '互联网资源池',
+          'regionType': 'external',
+          'data': [
+            {
+              'name': 'network',
+              'loadRate': 0.32,
+              'loadEvaluation': '低',
+              'loadCompare': -0.6
+            },
+            {
+              'name': 'storage',
+              'loadRate': 0.52,
+              'loadEvaluation': '高',
+              'loadCompare': +0.4
+            },
+            {
+              'name': 'service',
+              'loadRate': 0.36,
+              'loadEvaluation': '低',
+              'loadCompare': -0.2
+            },
+            {
+              'name': 'device',
+              'loadRate': 0.32,
+              'loadEvaluation': '低',
+              'loadCompare': -0.2
+            }
+          ]
+        }
       ]
     }
   },
+  created () {
+    this.init()
+  },
   methods: {
+    init() {
+      this.getResCapacityPhy()
+      this.getResInstanceStatistics()
+      this.getResLoadPhyResList()
+      this.getResCapacityPhyOverview()
+      this.getBaseRegionList()
+      this.getResCapacityPoolList()
+      this.getResLoadNetAreaResPool()
+    },
     toPage (url) {
       this.$store.commit('swtichRouter', url)
+    },
+    // className转换
+    switchClassName({value, sort = 1, isColor = false}) {
+      let className = 'good'
+      let color = '#aab6a5'
+      if (value > 0.8) {
+        if (sort == 1) {
+          className = 'good'
+          color = '#67c23a'
+        } else {
+          className = 'bad'
+          color = '#e62b2d'
+        }
+      } else if (value < 0.6) {
+        if (sort == 1) {
+          className = 'bad'
+          color = '#e62b2d'
+        } else {
+          className = 'good'
+          color = '#67c23a'
+        }
+      } else {
+        className = 'normal'
+        color = '#ffb438'
+      }
+      if (isColor) return color
+      else return className
+    },
+    // 物理资源剩余容量信息
+    getResCapacityPhy () {
+      API.getResCapacityPhy(this)
+        .then(res => {
+          // console.log('//物理资源剩余容量信息')
+          // console.log(res.data.body)
+          if (res.status == 200 && res.statusText == 'OK') {
+            res = res.data.body[0]
+            Object.keys(this.resCapacityPhy).forEach((val, i) => {
+              this.resCapacityPhy[val] = res[val]
+            })
+          }
+        })
+    },
+    // 查询云主机配置状态统计信息
+    getResInstanceStatistics () {
+      API.getResInstanceStatistics(this)
+        .then(res => {
+          // console.log('//查询云主机配置状态统计信息')
+          // console.log(res)
+          if (res.status == 200 && res.statusText == 'OK') {
+            res = res.data.body
+            Object.keys(this.resInstanceStatistics).forEach((val, i) => {
+              this.resInstanceStatistics[val] = res[val]
+            })
+          }
+        })
+    },
+    // 查询物理资源负载信息
+    getResLoadPhyResList () {
+      API.getResLoadPhyResList(this)
+        .then(res => {
+          // console.log('//查询物理资源负载信息')
+          if (res.status == 200 && res.statusText == 'OK') {
+            res = res.data.body.data
+            // console.log(res)
+            res.forEach((val, i) => {
+              // 后端type字段暂未返回,先mock
+              if (val.type == 'inner') {
+                this.resLoadPhyResList[0].loadEvaluation = val.loadEvaluation
+                this.resLoadPhyResList[0].loadRate = val.loadRate
+                this.resLoadPhyResList[0].className = this.switchClassName({value: val.loadRate, sort: -1})
+                this.resLoadPhyResList[0].color = this.switchClassName({value: val.loadRate, sort: -1, isColor: true})
+              }
+              if (val.type == 'external') {
+                this.resLoadPhyResList[1].loadEvaluation = val.loadEvaluation
+                this.resLoadPhyResList[1].loadRate = val.loadRate
+                this.resLoadPhyResList[1].className = this.switchClassName({value: val.loadRate, sort: -1})
+                this.resLoadPhyResList[1].color = this.switchClassName({value: val.loadRate, sort: -1, isColor: true})
+              }
+            })
+          }
+        })
+    },
+    // 物理设备容量统计信息
+    getResCapacityPhyOverview () {
+      API.getResCapacityPhyOverview(this)
+        .then(res => {
+          console.log('//物理设备容量统计信息')
+          console.log(res)
+        })
+    },
+    // 网络区域列表
+    getBaseRegionList () {
+      API.getBaseRegionList(this)
+        .then(res => {
+          // console.log('//网络区域列表')
+          if (res.status == 200 && res.statusText == 'OK') {
+            res = res.data.body
+            // console.log(res)
+            res.forEach((val, i) => {
+              this.baseRegionList[val.regionEnName] = true
+            })
+          }
+        })
+    },
+    // 资源池剩余容量信息
+    getResCapacityPoolList () {
+      API.getResCapacityPoolList(this, {
+        statisticsBy: 'regionType',
+        timeStart: '2018-08-10 00:00:00',
+        timeEnd: '2018-09-10 00:00:00'
+      })
+        .then(res => {
+          // console.log('//资源池剩余容量信息')
+          if (res.status == 200 && res.statusText == 'OK') {
+            res = res.data.body.data
+            // console.log(res)
+            res.forEach((val, i) => {
+              val.cpuClassName = this.switchClassName({value: val.cpuRate, isColor: true, sort: -1})
+              val.memoryClassName = this.switchClassName({value: val.memoryRate, isColor: true, sort: -1})
+              val.storageClassName = this.switchClassName({value: val.storageRate, isColor: true, sort: -1})
+            })
+            this.baseRegionList.capacityPoolList = res
+          }
+        })
+    },
+    // 网络区域资源池负载信息
+    getResLoadNetAreaResPool () {
+      API.getResLoadNetAreaResPool(this)
+        .then(res => {
+          console.log('//网络区域资源池负载信息')
+          if (res.status == 200 && res.statusText == 'OK') {
+            res = res.data.body
+            console.log(res)
+          }
+        })
     }
   },
   directives: {
     'num-animation': function (el, binding) {
-      let num = parseFloat(binding.value),
-        numStr = String(num)
+      let num = parseFloat(binding.value)
+      let numStr = String(num)
       if (!isNaN(num)) {
         let decNumber = 0
         if (numStr.split('.')[1]) {
@@ -284,7 +664,7 @@ export default {
     border-radius: 10px;
   }
 
-  .label-btn.enough{
+  .label-btn.enough, .good{
     background: $color-success;
   }
 
@@ -292,7 +672,7 @@ export default {
     background: $color-danger;
   }
 
-  .label-btn.high{
+  .label-btn.high, .bad{
     background: $color-danger;
   }
 
@@ -300,7 +680,7 @@ export default {
     background: $color-success;
   }
 
-  .label-btn.low{
+  .label-btn.low, .normal{
     background: $color-warning;
   }
 

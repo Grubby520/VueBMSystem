@@ -72,7 +72,7 @@ import BaseButtonGroup from '@/components/common/base/BaseButtonGroup.vue'
 import WSelect from '@/components/common/select/WSelect.vue'
 import { mapState } from 'vuex'
 import { dateFormat } from '@/assets/js/components/utility.js'
-import { urls } from '@/assets/js/api.js'
+import { urls } from '@/assets/js/api/api.js'
 import WMessage from '@/components/common/message/index.js'
 import menuMixin from '@/components/mixins/menu_mixin.js'
 export default{

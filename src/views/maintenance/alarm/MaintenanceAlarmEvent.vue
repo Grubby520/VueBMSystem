@@ -71,7 +71,7 @@
   </div>
 </template>
 <script>
-import API from '@/assets/js/api.js'
+import API from '@/assets/js/api/api.js'
 import Util from '@/assets/js/util/util.js'
 import WTabs from '@/components/common/WTabs.vue'
 import WTable from '@/components/common/WTable.vue'
@@ -154,15 +154,15 @@ export default {
       vm.page = 1
       this.getAlarmList()
     },
-    dateChange(){
-      let timeStart = this.flowStartDate?Util.dateFormat(this.flowStartDate,'yyyy-MM-dd hh:mm:ss'):this.flowStartDate,
-          flowEndDate = this.flowEndDate?Util.dateFormat(this.flowEndDate,'yyyy-MM-dd hh:mm:ss'):this.flowEndDate;
-     
-      if(timeStart && flowEndDate) {
-        if(timeStart > flowEndDate){
-          this.$message.error('开始时间不能大于结束时间');
-          this.flowStartDate = null;
-          this.flowEndDate = null;
+    dateChange() {
+      let timeStart = this.flowStartDate ? Util.dateFormat(this.flowStartDate, 'yyyy-MM-dd hh:mm:ss') : this.flowStartDate,
+        flowEndDate = this.flowEndDate ? Util.dateFormat(this.flowEndDate, 'yyyy-MM-dd hh:mm:ss') : this.flowEndDate
+
+      if (timeStart && flowEndDate) {
+        if (timeStart > flowEndDate) {
+          this.$message.error('开始时间不能大于结束时间')
+          this.flowStartDate = null
+          this.flowEndDate = null
         }
       }
     }

@@ -55,10 +55,26 @@ export default new Vuex.Store({
     },
     initMenueList (state, payload) {
       initItem(state.menueList)
+      // function initItem (arr) {
+      //   arr.forEach((item, index) => {
+      //     let url = /(.+)\/:/.exec(item.url) ? /(.+)\/:/.exec(item.url)[1] : item.url
+      //     if (new RegExp(url).test(payload.path)) {
+      //       item.isActive = true
+      //       arr.splice(index, 1, item)
+      //       if (item.children.length > 0) initItem(item.children)
+      //     } else {
+      //       item.isActive = false
+      //       arr.splice(index, 1, item)
+      //     }
+      //   })
+      // }
       function initItem (arr) {
         arr.forEach((item, index) => {
-          let url = /(.+)\/:/.exec(item.url) ? /(.+)\/:/.exec(item.url)[1] : item.url
-          if (new RegExp(url).test(payload.path)) {
+          const reg = new RegExp(payload.path.replace(/detail\/w*/, ''))
+          if (item.url === payload.path) {
+            item.isActive = true
+            arr.splice(index, 1, item)
+          } else if (payload.path.indexOf(item.url) === 0 && payload.path.charAt(item.url.length) === '/') {
             item.isActive = true
             arr.splice(index, 1, item)
             if (item.children.length > 0) initItem(item.children)
@@ -208,7 +224,7 @@ export default new Vuex.Store({
               'id': '35',
               'parentId': '5',
               'level': '2',
-              'name': '容量分析',
+              'name': '资源容量',
               'icon': 'iconfont icon-capacity_analysis-management',
               'url': '/resource/capacity',
               'children': []
@@ -220,6 +236,15 @@ export default new Vuex.Store({
               'name': '虚拟机资源配置',
               'icon': 'iconfont icon-appconfig_analysis-management',
               'url': '/resource/vm-config',
+              'children': []
+            },
+            {
+              'id': '45',
+              'parentId': '5',
+              'level': '2',
+              'name': '容量分析',
+              'icon': 'iconfont icon-appconfig_analysis-management',
+              'url': '/resource/capacity-analyses',
               'children': []
             },
             {
