@@ -3,7 +3,7 @@
     <el-row :gutter="15">
       <el-col :span="24">
         <div v-for="(item,index) in resPoolList" :key="index" class="respool-module">
-          <div class="respool-content whiteBg" :class="item.performStatus">
+          <div class="respool-content whiteBg">
             <div class="respool-content-head table-block">
               <div class="table-cell table-cell-4_1">
                 <div class="data-icon" :class="item.performStatus" v-show="item.performStatus == 'best'">
@@ -29,26 +29,26 @@
               </div>
               <div class="table-cell table-cell-4_3">
                 <div class="hNav-toggle">
-                  <h1>{{item.providerRegionName}}</h1>
+                  <h1>{{item.regionProviderName}}</h1>
                 </div>
-                <p class="perform-statustext">性能：{{statusText(item.performStatus)}}</p>
+                <p class="perform-statustext111">性能：<span class="status-text" :class='statusColor(item.capacityStatusCn)'>{{item.capacityStatusCn}}</span></p>
               </div>
             </div>
             <div class="respool-content-body">
               <div class="content-label">
                 <p>
                 虚拟资源分配情况:
-                <span class="label-btn" :class="statusClass(item.virtualAllocate)">{{statusText(item.virtualAllocate)}}</span>
+                <span class="label-btn" :class="statusClassName(item.capacityStatusCn)">{{item.capacityStatusCn}}</span>
                 </p>
                 <div class="echart-con" :id="'echarts-radar-'+index" style="height:120px;" v-echarts-radar="item.rate"
-                :data-status="item.virtualAllocate" @click="toResDistributionPage(item.providerRegionId)"></div>
+                :data-status="statusColor(item.capacityStatusCn, true)" @click="toResDistributionPage(item.regionProviderId)"></div>
                 <p>
                 物理资源当前负载:
-                <span class="res-number status-text" :class="item.runStatus">{{item.loadRadio}}<sub>%</sub></span>
-                <span class="label-btn" :class="item.runStatus">{{statusText(item.runStatus)}}</span>
+                <span class="res-number status-text" :class="statusColor(item.loadEvaluation)">{{item.loadRate}}<sub>%</sub></span>
+                <span class="label-btn" :class="statusClassName(item.loadEvaluation)">{{statusText(item.loadEvaluation)}}</span>
                 </p>
                 <div class="echart-con" :id="'echarts-line-'+index" style="height:100px;" v-echarts-line="item.trend"
-                :data-status="item.runStatus" @click="toResLoadPage(item.providerRegionId)"></div>
+                :data-status="item.runStatus" @click="toResLoadPage(item.regionProviderId)"></div>
               </div>
             </div>
           </div>
@@ -58,60 +58,129 @@
     <el-row :gutter="15">
       <el-col :span="24">
         <w-tabs :active-name="activeName" :handle-click="handleClick" class="whiteBg" style="padding-left:15px;">
-          <el-tab-pane label="资产变更事件" name="event_asset-change">
+          <el-tab-pane label="资产变更事件" name="event_asset_change">
+            <!-- tab 1 -->
             <w-table>
               <template slot="title">资产变更事件列表</template>
               <div slot="opt">
                 <el-date-picker
-                  v-model="startDate"
+                  v-model="assetChangeSearchList.startDate"
                   type="datetime"
                   name="startDate"
                   placeholder="选择开始时间">
                 </el-date-picker>
                 <el-date-picker
-                  v-model="endDate"
+                  v-model="assetChangeSearchList.endDate"
                   type="datetime"
                   name="endDate"
                   placeholder="选择结束时间">
                 </el-date-picker>
                 <base-button-group>
-                  <base-button @click="alert('查询')">查询</base-button>
+                  <base-button @click="searchFn('change')">查询</base-button>
                 </base-button-group>
               </div>
               <template slot="table-list">
                 <div>
                   <el-table
-                      :data="assetsChangeList"
+                      :data="assetsChangeTableList"
                       stripe
                       style="width: 100%">
                       <el-table-column
-                        prop="time"
+                        prop="eventTime"
                         label="时间">
                       </el-table-column>
                       <el-table-column
-                        prop="resPool"
+                        prop="eventType"
+                        label="资源类型">
+                      </el-table-column>
+                      <el-table-column
+                        prop="poolName"
                         label="资源池">
                       </el-table-column>
                       <el-table-column
-                        prop="changeType"
+                        prop="eventTypeName"
                         label="变更类型">
                       </el-table-column>
                       <el-table-column
-                        prop="beforeChange"
+                        prop="countBefore"
                         label="变更前资源">
                       </el-table-column>
                       <el-table-column
-                        prop="afterChange"
+                        prop="countAfter"
                         label="变更后资源">
                       </el-table-column>
                   </el-table>
                   <el-pagination
-                      v-show="total > pageSize"
-                      @current-change="currentChange"
-                      :current-page="page"
-                      :page-size="pageSize"
+                      v-show="assetChangeSearchList.total > assetChangeSearchList.pageSize"
+                      @current-change="assetChangeFn"
+                      :current-page="assetChangeSearchList.page"
+                      :page-size="assetChangeSearchList.pageSize"
                       layout="total, prev, pager, next, jumper"
-                      :total="total">
+                      :total="assetChangeSearchList.total">
+                  </el-pagination>
+                </div>
+              </template>
+            </w-table>
+          </el-tab-pane>
+          <el-tab-pane label="资产负载异常事件" name="event_abnormal_change">
+            <!-- tab 1 -->
+            <w-table>
+              <template slot="title">资产负载异常事件列表</template>
+              <div slot="opt">
+                <el-date-picker
+                  v-model="assetAbnormalSearchList.startDate"
+                  type="datetime"
+                  name="startDate"
+                  placeholder="选择开始时间">
+                </el-date-picker>
+                <el-date-picker
+                  v-model="assetAbnormalSearchList.endDate"
+                  type="datetime"
+                  name="endDate"
+                  placeholder="选择结束时间">
+                </el-date-picker>
+                <base-button-group>
+                  <base-button @click="searchFn('abnormal')">查询</base-button>
+                </base-button-group>
+              </div>
+              <template slot="table-list">
+                <div>
+                  <el-table
+                      :data="assetsAbnormalTableList"
+                      stripe
+                      style="width: 100%">
+                      <el-table-column
+                        prop="eventTime"
+                        label="时间">
+                      </el-table-column>
+                      <el-table-column
+                        prop="eventType"
+                        label="事件类型">
+                      </el-table-column>
+                      <el-table-column
+                        prop="poolName"
+                        label="资源池">
+                      </el-table-column>
+                      <el-table-column
+                        prop="resourceType"
+                        label="资源类型">
+                      </el-table-column>
+                      <el-table-column
+                        prop="resourceName"
+                        label="资源名称">
+                      </el-table-column>
+                      <el-table-column
+                        prop="load"
+                        label="负载值">
+                      </el-table-column>
+                  </el-table>
+                  <el-pagination
+                      v-show="assetAbnormalSearchList.total > assetAbnormalSearchList.pageSize"
+                      @current-change="assetAbnormalFn"
+                      :current-page="assetAbnormalSearchList.page"
+                      :page-size="assetAbnormalSearchList.pageSize"
+                      layout="total, prev, pager, next, jumper"
+                      :total="assetAbnormalSearchList.total">
                   </el-pagination>
                 </div>
               </template>
@@ -123,6 +192,7 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
 import menuMixin from '@/components/mixins/menu_mixin.js'
 import Charts from '@/assets/js/components/chartsFun.js'
 import API from '@/assets/js/api/api.js'
@@ -132,10 +202,10 @@ import WTable from '@/components/common/WTable.vue'
 import BaseButton from '@/components/common/base/BaseButton.vue'
 import BaseButtonGroup from '@/components/common/base/BaseButtonGroup.vue'
 const colorMap = {
-  'normal': '#3ECB79',
-  'abnormal': '#D71919',
+  'normal': '#3ECB79', // 好
+  'abnormal': '#D71919', // 中
   'idle': '#F39800',
-  'busy': '#D71919',
+  'busy': '#D71919', // 差
   '0': '#D71919',
   '1': '#3ECB79'
 }
@@ -153,14 +223,48 @@ export default {
       }],
       resPoolList: [], // 资源池模块数据
       abnormalText: '?', // 用于替代后台返回的异常数值型数据
-      emptyText: '暂无数据',
-      activeName: 'event_asset-change',
-      assetsChangeList: [],
-      total: 0,
-      page: 1,
-      pageSize: 10,
-      startDate: '',
-      endDate: ''
+      activeName: 'event_asset_change', // 默认显示tabName
+      // table-1
+      assetsChangeTableList: [
+        {
+        "id":"1",
+        "eventTime":"2018-09-12 17:23:51",
+        "poolId":"1",
+        "poolName":"1",
+        "eventType":1,
+        "eventTypeName":"存储服务器数量变更",
+        "countBefore":234.0,
+        "countAfter":234.0
+        }
+      ],
+      assetChangeSearchList: {
+        total: 0,
+        page: 1,
+        pageSize: 10,
+        startDate: '',
+        endDate: ''
+      },
+      // table-2
+      assetsAbnormalTableList: [
+        {
+        "id":"1",
+        "eventTime":"2018-09-12 17:23:11",
+        "poolId":"1",
+        "poolName":"1",
+        "eventType":3,
+        "eventTypeName":"存储设备负载过高",
+        "resourceType":"虚拟机",
+        "resourceName":"vm-001",
+        "load":99.9
+        }
+      ],
+      assetAbnormalSearchList: {
+        total: 0,
+        page: 1,
+        pageSize: 10,
+        startDate: '',
+        endDate: ''
+      }
     }
   },
   components: {
@@ -171,18 +275,32 @@ export default {
   },
   created() {
     this.init()
+    this.getResEventDeviceChange()
+    this.getResEventLoad()
   },
   methods: {
     init() {
-      this.getResCapacotuVirtualList()
-      this.getResLoadPhyResList()
-      this.getResLoadTrendResPoolList()
+      this.getRegionList() // 并发
+    },
+    percentNum(num) {
+      return Number(num) * 100
     },
     handleClick (tab, event) {
-      console.log(tab, event)
+      // console.log(tab, event)
     },
-    currentChange: function (curPage) {
-      this.page = curPage
+    assetChangeFn: function (curPage) {
+      this.assetChangeSearchList.page = curPage
+    },
+    assetAbnormalFn: function (curPage) {
+      this.assetAbnormalSearchList.page = curPage
+    },
+    searchFn(type) {
+      if (type === 'change') {
+        this.getResEventDeviceChange(this.assetChangeSearchList)
+      }
+      else if (type === 'abnormal') {
+        this.getResEventLoad(this.assetAbnormalSearchList)
+      }
     },
     isNumber: function (value) {
       if (typeof value === 'number') {
@@ -200,26 +318,37 @@ export default {
     },
     statusText: function (status) {
       let map = {
-        'best': '优',
-        'good': '良',
-        'general': '中',
-        'bad': '差',
-        'normal': '正常',
-        'abnormal': '异常',
-        'idle': '负载低',
-        'busy': '负载高',
-        0: '不足',
-        1: '充足'
+        '低': '负载低',
+        '中': '负载中',
+        '高': '负载高'
       }
-
       return map[status] ? map[status] : '?'
+    },
+    statusColor: function (status, getStatus) {
+      let map = {
+        '低': 'busy',
+        '中': 'normal',
+        '高': 'busy',
+        '充足': getStatus ? 1 : 'normal',
+        '不充足': getStatus ? 0 : 'busy'
+      }
+      return map[status] ? map[status] : '?'
+    },
+    statusClassName: function (text) {
+      let map = {
+        '低': 'busy',
+        '中': 'normal',
+        '高': 'busy',
+        '充足': 'normal',
+        '不充足': 'busy'
+      }
+      return map[text] ? map[text] : 'good'
     },
     statusClass: function (status) {
       let map = {
         0: 'shortage',
         1: 'enough'
       }
-
       return map[status] ? map[status] : ''
     },
     toResDistributionPage: function (id) {
@@ -228,31 +357,142 @@ export default {
     toResLoadPage: function (id) {
 
     },
+    // 请求序列
+    getRegionList() {
+      const self = this
+      axios.all([this.getRegionProviderList(), this.getResCapacityPoolList(), this.getResLoadPhyResList(), this.getResLoadTrendResPoolList()])
+        .then(axios.spread(function(providerList, poolList, resList, loadList) {
+          // 1111
+          if (providerList.status == 200 && providerList.statusText == 'OK') {
+            providerList = providerList.data.body
+            console.log(providerList)
+            providerList.forEach((val, i) => {
+              self.resPoolList.push({
+                regionProviderId: val.regionProviderId,
+                regionProviderName: val.regionProviderName,
+                regionId: val.regionId,
+                providerId: val.providerId
+              })
+            })
+          }
+          // 2222
+          if (poolList.status == 200 && poolList.statusText == 'OK') {
+            poolList = poolList.data.body.data
+            console.log(poolList)
+            poolList.forEach((val, i) => {
+              const temp = val.regionId // 暂时用regionId关联数据
+              self.resPoolList.forEach((nVal, nI) => {
+                if (nVal.regionId == temp) {
+                  nVal.rate = [
+                    {
+                      'name': '内存',
+                      'value': val.memory
+                    },
+                    {
+                      'name': '云存储',
+                      'value': val.storage
+                    },
+                    {
+                      'name': 'CPU',
+                      'value': val.cpu
+                    }
+                  ]
+                  nVal.capacityStatusCn = val.capacityStatusCn
+                  return false
+                }
+              })
+            })
+          }
+          // 3333
+          if (resList.status == 200 && resList.statusText == 'OK') {
+            resList = resList.data.body.data
+            console.log(resList)
+            resList.forEach((val, i) => {
+              const temp = val.id // 暂时用id?什么id 关联
+              self.resPoolList.forEach((nVal, nI) => {
+                if (nVal.regionId == temp) {
+                  nVal.loadRate = this.percentNum(val.loadRate)
+                  nVal.loadEvaluation = val.loadEvaluation
+                }
+              })
+            })
+          }
+          // 4444
+          if (loadList.status == 200 && loadList.statusText == 'OK') {
+            loadList = loadList.data.body
+            console.log(loadList)
+            resList.forEach((val, i) => {
+              const temp = val.poolId // 关联id
+              self.resPoolList.forEach((nVal, nI) => {
+                if (nVal.regionId == temp) {
+                  const innerData = val.data
+                  self.resPoolList[nI].trend = {
+                    xValue: [],
+                    value: [{
+                      name: '',
+                      data: []
+                    }]
+                  }
+                  innerData.forEach((iVal, iI) => {
+                    self.resPoolList[nI].trend.xValue.push(iVal.date)
+                    self.resPoolList[nI].trend.value[0].name = iVal.name
+                    self.resPoolList[nI].trend.value[0].data.push(iVal.loadRate * 100) // 百分数
+                  })
+                }
+              })
+            })
+          }
+        }))
+    },
     // 资源池及对应单位和应用列表
-    // 资源池容量信息
-    getResCapacityVirtualList () {
-      API.getResCapacotuVirtualList(this)
-        .then(res => {
-          console.log('//资源池容量信息')
-          console.log(res)
-        })
+    getRegionProviderList() {
+      return API.getRegionProviderList(this)
+    },
+    // 资源池剩余容量信息
+    getResCapacityPoolList () {
+      return API.getResCapacityPoolList(this, {
+        statisticsBy: 'regionType',
+        timeStart: '2018-08-10 00:00:00',
+        timeEnd: '2018-09-10 00:00:00'
+      })
     },
     // 物理资源负载信息
     getResLoadPhyResList () {
-      API.getResLoadPhyResList(this)
-        .then(res => {
-          console.log('//物理资源负载信息')
-          console.log(res)
-        })
+      return API.getResLoadPhyResList(this)
     },
     // 资源池负载趋势信息
     getResLoadTrendResPoolList () {
-      API.getResLoadTrendResPoolList(this, {
-        resourcePoolId: ''
-      })
-        .then(res => {
-          console.log('//资源池负载趋势信息')
+      return API.getResLoadTrendResPoolList(this)
+    },
+    // table
+    // 配置变更事件
+    getResEventDeviceChange(params = {}) {
+      API.getResEventDeviceChange(this, params)
+        .then((res) => {
+          console.log('配置变更事件')
           console.log(res)
+          if (res.status == 200 && res.statusText == 'OK') {
+            res = res.data.body
+            this.assetsChangeTableList = res.data
+            this.assetChangeSearchList.total = res.total
+            this.assetChangeSearchList.pageSize = res.pageSize
+            this.assetChangeSearchList.page = res.page
+          }
+        })
+    },
+    // 负载异常事件
+    getResEventLoad(params = {}) {
+      API.getResEventLoad(this, params)
+        .then((res) => {
+          console.log('负载异常事件')
+          console.log(res)
+          if (res.status == 200 && res.statusText == 'OK') {
+            res = res.data.body
+            this.assetsAbnormalTableList = res.data
+            this.assetAbnormalSearchList.total = res.total
+            this.assetAbnormalSearchList.pageSize = res.pageSize
+            this.assetAbnormalSearchList.page = res.page
+          }
         })
     }
   },
@@ -344,64 +584,15 @@ export default {
   mounted () {
     this.resPoolList = [
       {
-        'providerRegionId': '1d00a0ba-3ee6-11e8-9e3f-00e0ed433b66',
-        'providerRegionName': '互联网资源池-移动',
-        'cpuTotalAmount': 1000,
-        'cpuUsageAmount': 200,
-        'memoryTotalAmount': 500.0,
-        'memoryUsageAmount': 250.0,
-        'storageTotalAmount': 900.0,
-        'storageUsageAmount': 700.0,
-        'ipTotalAmount': 50,
-        'ipUsageAmount': 25,
-        'virtualAllocate': 1,
-        'performStatus': 'good',
-        'runStatus': 'normal',
-        'loadRadio': 30.0,
-        'resourceLoads': [
-          {
-            'trendId': '9',
-            'runStatus': 'normal',
-            'loadRadio': 88.0,
-            'gatherTime': '2018-05-24 11:32:56'
-          },
-          {
-            'trendId': '8',
-            'runStatus': 'normal',
-            'loadRadio': 25.0,
-            'gatherTime': '2018-05-25 11:32:56'
-          },
-          {
-            'trendId': '7',
-            'runStatus': 'normal',
-            'loadRadio': 16.0,
-            'gatherTime': '2018-05-26 11:32:56'
-          },
-          {
-            'trendId': '6',
-            'runStatus': 'normal',
-            'loadRadio': 71.0,
-            'gatherTime': '2018-05-27 11:32:56'
-          },
-          {
-            'trendId': '5',
-            'runStatus': 'normal',
-            'loadRadio': 33.0,
-            'gatherTime': '2018-05-29 18:32:56'
-          },
-          {
-            'trendId': '2',
-            'runStatus': 'normal',
-            'loadRadio': 55.0,
-            'gatherTime': '2018-05-31 11:32:56'
-          },
-          {
-            'trendId': '1',
-            'runStatus': 'normal',
-            'loadRadio': 30.0,
-            'gatherTime': '2018-06-01 11:32:56'
-          }
-        ],
+        'regionProviderId': '1d00a36e-3ee6-11e8-9e3f-00e0ed433b66',
+        'regionProviderName': '互联网资源池-移动',
+        'regionId': '',
+        'providerId': '',
+        'performStatus': 'good', // 图标 字体 chart背景色
+        'capacityStatusCn': '充足', // 转换virtualAllocate:: 0/1
+        'loadEvaluation': '低', // 映射到className
+        'loadRate': 30.0,
+        'runStatus': 'busy', // 线条颜色
         'rate': [
           {
             'name': '内存',
@@ -437,271 +628,6 @@ export default {
                 33.0,
                 55.0,
                 30.0
-              ]
-            }
-          ]
-        }
-      },
-      {
-        'providerRegionId': '1d00a2c3-3ee6-11e8-9e3f-00e0ed433b66',
-        'providerRegionName': '互联网资源池-联通',
-        'cpuTotalAmount': 200,
-        'cpuUsageAmount': 180,
-        'memoryTotalAmount': 300.0,
-        'memoryUsageAmount': 290.0,
-        'storageTotalAmount': 700.0,
-        'storageUsageAmount': 650.0,
-        'ipTotalAmount': 50,
-        'ipUsageAmount': 45,
-        'virtualAllocate': 0,
-        'performStatus': 'good',
-        'runStatus': 'abnormal',
-        'loadRadio': 0.0,
-        'resourceLoads': [
-          {
-            'trendId': '16',
-            'runStatus': 'abnormal',
-            'loadRadio': 53.0,
-            'gatherTime': '2018-05-26 11:32:56'
-          },
-          {
-            'trendId': '15',
-            'runStatus': 'abnormal',
-            'loadRadio': 99.0,
-            'gatherTime': '2018-05-27 11:32:56'
-          },
-          {
-            'trendId': '14',
-            'runStatus': 'abnormal',
-            'loadRadio': 18.0,
-            'gatherTime': '2018-05-28 11:32:56'
-          },
-          {
-            'trendId': '13',
-            'runStatus': 'abnormal',
-            'loadRadio': 71.0,
-            'gatherTime': '2018-05-29 11:32:56'
-          },
-          {
-            'trendId': '12',
-            'runStatus': 'abnormal',
-            'loadRadio': 23.0,
-            'gatherTime': '2018-05-30 11:32:56'
-          },
-          {
-            'trendId': '11',
-            'runStatus': 'abnormal',
-            'loadRadio': 89.0,
-            'gatherTime': '2018-05-31 11:32:56'
-          },
-          {
-            'trendId': '10',
-            'runStatus': 'abnormal',
-            'loadRadio': 0.0,
-            'gatherTime': '2018-06-01 11:32:56'
-          }
-        ],
-        'rate': [
-          {
-            'name': '内存',
-            'value': 96.67
-          },
-          {
-            'name': '云存储',
-            'value': 92.86
-          },
-          {
-            'name': 'CPU',
-            'value': 90.0
-          }
-        ],
-        'trend': {
-          'xValue': [
-            '周六',
-            '周日',
-            '周一',
-            '周二',
-            '周三',
-            '周四',
-            '周五'
-          ],
-          'value': [
-            {
-              'name': '互联网资源池-联通',
-              'data': [
-                53.0,
-                99.0,
-                18.0,
-                71.0,
-                23.0,
-                89.0,
-                0.0
-              ]
-            }
-          ]
-        }
-      },
-      {
-        'providerRegionId': '1d00a36e-3ee6-11e8-9e3f-00e0ed433b66',
-        'providerRegionName': '政务外网资源池-联通',
-        'cpuTotalAmount': 200,
-        'cpuUsageAmount': 180,
-        'memoryTotalAmount': 300.0,
-        'memoryUsageAmount': 290.0,
-        'storageTotalAmount': 700.0,
-        'storageUsageAmount': 650.0,
-        'ipTotalAmount': 50,
-        'ipUsageAmount': 45,
-        'virtualAllocate': 0,
-        'performStatus': 'general',
-        'runStatus': 'idle',
-        'loadRadio': 8.0,
-        'resourceLoads': [
-          {
-            'trendId': '22',
-            'runStatus': 'idle',
-            'loadRadio': 12.0,
-            'gatherTime': '2018-05-30 11:32:56'
-          },
-          {
-            'trendId': '21',
-            'runStatus': 'idle',
-            'loadRadio': 15.0,
-            'gatherTime': '2018-05-31 11:32:56'
-          },
-          {
-            'trendId': '20',
-            'runStatus': 'idle',
-            'loadRadio': 8.0,
-            'gatherTime': '2018-06-01 11:32:56'
-          }
-        ],
-        'rate': [
-          {
-            'name': '内存',
-            'value': 96.67
-          },
-          {
-            'name': '云存储',
-            'value': 92.86
-          },
-          {
-            'name': 'CPU',
-            'value': 90.0
-          }
-        ],
-        'trend': {
-          'xValue': [
-            '周三',
-            '周四',
-            '周五'
-          ],
-          'value': [
-            {
-              'name': '政务外网资源池-联通',
-              'data': [
-                12.0,
-                15.0,
-                8.0
-              ]
-            }
-          ]
-        }
-      },
-      {
-        'providerRegionId': '1d00a3eb-3ee6-11e8-9e3f-00e0ed433b66',
-        'providerRegionName': '政务外网资源池-移动',
-        'cpuTotalAmount': 200,
-        'cpuUsageAmount': 180,
-        'memoryTotalAmount': 300.0,
-        'memoryUsageAmount': 290.0,
-        'storageTotalAmount': 700.0,
-        'storageUsageAmount': 650.0,
-        'ipTotalAmount': 50,
-        'ipUsageAmount': 45,
-        'virtualAllocate': 0,
-        'performStatus': 'bad',
-        'runStatus': 'busy',
-        'loadRadio': 67.0,
-        'resourceLoads': [
-          {
-            'trendId': '36',
-            'runStatus': 'busy',
-            'loadRadio': 78.0,
-            'gatherTime': '2018-05-24 11:32:56'
-          },
-          {
-            'trendId': '31',
-            'runStatus': 'busy',
-            'loadRadio': 77.0,
-            'gatherTime': '2018-05-25 11:32:56'
-          },
-          {
-            'trendId': '32',
-            'runStatus': 'busy',
-            'loadRadio': 88.0,
-            'gatherTime': '2018-05-28 11:32:56'
-          },
-          {
-            'trendId': '33',
-            'runStatus': 'busy',
-            'loadRadio': 87.0,
-            'gatherTime': '2018-05-29 11:32:56'
-          },
-          {
-            'trendId': '34',
-            'runStatus': 'busy',
-            'loadRadio': 67.0,
-            'gatherTime': '2018-05-30 11:32:56'
-          },
-          {
-            'trendId': '35',
-            'runStatus': 'busy',
-            'loadRadio': 77.0,
-            'gatherTime': '2018-05-31 11:32:56'
-          },
-          {
-            'trendId': '30',
-            'runStatus': 'busy',
-            'loadRadio': 67.0,
-            'gatherTime': '2018-06-01 11:32:56'
-          }
-        ],
-        'rate': [
-          {
-            'name': '内存',
-            'value': 96.67
-          },
-          {
-            'name': '云存储',
-            'value': 92.86
-          },
-          {
-            'name': 'CPU',
-            'value': 90.0
-          }
-        ],
-        'trend': {
-          'xValue': [
-            '周四',
-            '周五',
-            '周一',
-            '周二',
-            '周三',
-            '周四',
-            '周五'
-          ],
-          'value': [
-            {
-              'name': '政务外网资源池-移动',
-              'data': [
-                78.0,
-                77.0,
-                88.0,
-                87.0,
-                67.0,
-                77.0,
-                67.0
               ]
             }
           ]

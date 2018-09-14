@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from './store'
 import xhr from './assets/js/components/xhr'
+import API from './assets/js/api/api'
 import Message from '@/components/common/message/index.js'
 
 import About from './views/About.vue'
@@ -79,7 +80,7 @@ const router = new Router({
           component: ResourceDistribution
         },
         {
-          path: 'resource/distribution/detail/:orgId?',
+          path: 'resource/distribution/detail/:orgId/:regionProviderId',
           name: 'resource_distribution_detail',
           component: ResourceDistributionDetail
         },
@@ -157,7 +158,7 @@ router.beforeEach((to, from, next) => {
         xhr.Axios.get('/base/user/loginUserInfo')
           .then((res) => {
             console.log(res)
-            window.sessionStorage.setItem('loginUserBaseInfo', JSON.stringify({'token': 'eyJhbGciOiJIUzI1NiIsInppcCI6IkRFRiJ9.eNosjUEKwyAQAP-yZxXXqGu99Rho6RtisymCJCHGXkr_Xg-9DcPAfKC2BBFAQKt8jHPnoLV_LjRLbTBIRCaZrJuks8SUmAdvXe9zfey83ls5M8RlKpUFHFvhG7-5QEQBZXvl9Xp2doO9hEA6GBv-ftz7CskoJGWMU17D9wcAAP__.Irw2q7f_Fbnb4wBb3Fj_RfZgXFqd-JW5nD8DIqWbeco', 'userId': '8006cf7d-0218-11e7-b45a-547e7bee3645', 'username': 'super_admin', 'realName': 'super_admin', 'isOpenMulti': false, 'roleLevel': 1}))
+            window.sessionStorage.setItem('loginUserBaseInfo', JSON.stringify(res.data.body.data))
             store.commit('setUserInfo', JSON.parse(window.sessionStorage.loginUserBaseInfo))
           })
         next()

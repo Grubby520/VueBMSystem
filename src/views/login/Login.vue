@@ -217,7 +217,6 @@ export default{
         if (valid) {
           _this.getUserInfo(_this.form)
             .then((res) => {
-              debugger
               console.log(res)
               // window.sessionStorage.setItem('loginUserBaseInfo',JSON.stringify(Object.assign(res.data.body, {lifeTime:60})))
               this.$router.push({

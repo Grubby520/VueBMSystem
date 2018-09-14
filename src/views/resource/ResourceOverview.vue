@@ -123,47 +123,47 @@
             <template slot="title">互联网资源池负载</template>
             <div slot="content" v-for="item in netAreaResPool" :key='item.regionType'>
               <div class="table-block table-column-4" v-if="item.regionType == 'inner'">
-                <div v-for="inner in item.data" :key='inner.name'>
-                  <div class="table-cell respool-module load" v-if="inner.name = 'service'">
+                <div class="table-cell respool-module load" v-for="inner in item.data" :key='inner.name'>
+                  <div v-if="inner.name == 'service'">
                     <p class="clearfix">
                       <label>计算器服务</label>
-                      <span class="normal-number ft-20 right">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
+                      <span class="normal-number ft-20 right" :style="{color: inner.color}">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
                     </p>
                     <p class="clearfix ft-12">
-                      <span class="label-btn middle">当前负载{{inner.loadEvaluation}}</span>
+                      <span class="label-btn" :class="inner.className">当前负载{{inner.loadEvaluation}}</span>
                       <span class="right">(比昨日{{inner.loadCompare}})</span>
                     </p>
                   </div>
-                  <!-- <div class="table-cell respool-module load" v-if="inner.name = 'storage'">
+                  <div v-if="inner.name == 'storage'">
                     <p class="clearfix">
                       <label>存储服务器</label>
-                      <span class="normal-number ft-20 right">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
+                      <span class="normal-number ft-20 right" :style="{color: inner.color}">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
                     </p>
                     <p class="clearfix ft-12">
-                      <span class="label-btn middle">当前负载{{inner.loadEvaluation}}</span>
+                      <span class="label-btn" :class="inner.className">当前负载{{inner.loadEvaluation}}</span>
                       <span class="right">(比昨日{{inner.loadCompare}})</span>
                     </p>
                   </div>
-                  <div class="table-cell respool-module load" v-if="inner.name = 'device'">
+                  <div v-if="inner.name == 'device'">
                     <p class="clearfix">
                       <label>存储设备</label>
-                      <span class="normal-number ft-20 right">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
+                      <span class="normal-number ft-20 right" :style="{color: inner.color}">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
                     </p>
                     <p class="clearfix ft-12">
-                      <span class="label-btn middle">当前负载{{inner.loadEvaluation}}</span>
+                      <span class="label-btn" :class="inner.className">当前负载{{inner.loadEvaluation}}</span>
                       <span class="right">(比昨日{{inner.loadCompare}})</span>
                     </p>
                   </div>
-                  <div class="table-cell respool-module load" v-if="inner.name = 'network'">
+                  <div v-if="inner.name == 'network'">
                     <p class="clearfix">
                       <label>网络出口宽带</label>
-                      <span class="normal-number ft-20 right">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
+                      <span class="normal-number ft-20 right" :style="{color: inner.color}">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
                     </p>
                     <p class="clearfix ft-12">
-                      <span class="label-btn middle">当前负载{{inner.loadEvaluation}}</span>
+                      <span class="label-btn" :class="inner.className">当前负载{{inner.loadEvaluation}}</span>
                       <span class="right">(比昨日{{inner.loadCompare}})</span>
                     </p>
-                  </div> -->
+                  </div>
                 </div>
               </div>
             </div>
@@ -204,52 +204,52 @@
           </w-row>
           <w-row>
             <template slot="title">政务外网资源池负载</template>
-            <!-- <div slot="content" v-for="item in netAreaResPool" :key='item.regionType'>
+            <div slot="content" v-for="item in netAreaResPool" :key='item.regionType'>
               <div class="table-block table-column-4" v-if="item.regionType == 'external'">
-                <div v-for="inner in item.data" :key='inner.name'>
-                  <div class="table-cell respool-module load" v-if="inner.name = 'service'">
+                <div class="table-cell respool-module load" v-for="inner in item.data" :key='inner.name'>
+                  <div v-if="inner.name == 'service'">
                     <p class="clearfix">
                       <label>计算器服务</label>
-                      <span class="normal-number ft-20 right">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
+                      <span class="normal-number ft-20 right" :style="{color: inner.color}">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
                     </p>
                     <p class="clearfix ft-12">
-                      <span class="label-btn middle">当前负载{{inner.loadEvaluation}}</span>
+                      <span class="label-btn" :class="inner.className">当前负载{{inner.loadEvaluation}}</span>
                       <span class="right">(比昨日{{inner.loadCompare}})</span>
                     </p>
                   </div>
-                  <div class="table-cell respool-module load" v-if="inner.name = 'storage'">
+                  <div v-if="inner.name == 'storage'">
                     <p class="clearfix">
                       <label>存储服务器</label>
-                      <span class="normal-number ft-20 right">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
+                      <span class="normal-number ft-20 right" :style="{color: inner.color}">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
                     </p>
                     <p class="clearfix ft-12">
-                      <span class="label-btn middle">当前负载{{inner.loadEvaluation}}</span>
+                      <span class="label-btn" :class="inner.className">当前负载{{inner.loadEvaluation}}</span>
                       <span class="right">(比昨日{{inner.loadCompare}})</span>
                     </p>
                   </div>
-                  <div class="table-cell respool-module load" v-if="inner.name = 'device'">
+                  <div v-if="inner.name == 'device'">
                     <p class="clearfix">
                       <label>存储设备</label>
-                      <span class="normal-number ft-20 right">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
+                      <span class="normal-number ft-20 right" :style="{color: inner.color}">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
                     </p>
                     <p class="clearfix ft-12">
-                      <span class="label-btn middle">当前负载{{inner.loadEvaluation}}</span>
+                      <span class="label-btn" :class="inner.className">当前负载{{inner.loadEvaluation}}</span>
                       <span class="right">(比昨日{{inner.loadCompare}})</span>
                     </p>
                   </div>
-                  <div class="table-cell respool-module load" v-if="inner.name = 'network'">
+                  <div v-if="inner.name == 'network'">
                     <p class="clearfix">
                       <label>网络出口宽带</label>
-                      <span class="normal-number ft-20 right">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
+                      <span class="normal-number ft-20 right" :style="{color: inner.color}">{{parseInt(inner.loadRate*100)}}<i>%</i></span>
                     </p>
                     <p class="clearfix ft-12">
-                      <span class="label-btn middle">当前负载{{inner.loadEvaluation}}</span>
+                      <span class="label-btn" :class="inner.className">当前负载{{inner.loadEvaluation}}</span>
                       <span class="right">(比昨日{{inner.loadCompare}})</span>
                     </p>
                   </div>
                 </div>
               </div>
-            </div> -->
+            </div>
           </w-row>
         </div>
       </el-col>
@@ -265,10 +265,10 @@
                       <span class="pageIconFont ft-30" :class="item.icon"></span>
                     </div>
                     <div class="table-cell table-v-center">
-                      <h3 class="ft-14">{{item.name}}</h3>
+                      <h3 class="ft-14">{{item.devTypeCn}}</h3>
                       <p class="">
-                        <span class="number-wrap ft-12">共<span class="normal-number ft-20" v-num-animation="item.normalNum">{{item.normalNum | exceptionFilter}}</span>台</span>
-                        <span class="number-wrap ft-12"><span class="abnormal-number ft-20" v-num-animation="item.normalNum">{{item.abnormalNum | exceptionFilter}}</span>台异常</span>
+                        <span class="number-wrap ft-12">共<span class="normal-number ft-20" v-num-animation="item.totalCount">{{item.totalCount | exceptionFilter}}</span>台</span>
+                        <span class="number-wrap ft-12"><span class="abnormal-number ft-20" v-num-animation="item.aberrantCount">{{item.aberrantCount | exceptionFilter}}</span>台异常</span>
                       </p>
                     </div>
                   </div>
@@ -304,58 +304,29 @@ export default {
         name: '资源概览'
       }],
       resCapacityPhy: {
-        allocatedVmQuantity: 0,
+        allocatedVmQuantity: '-',
         capacityStatus: '充足'
       },
       resInstanceStatistics: {
-        statusHighInstanceCount: 0,
-        statusLowInstanceCount: 0
+        statusHighInstanceCount: '-',
+        statusLowInstanceCount: '-'
       },
       resLoadPhyResList: [
         {
-          loadEvaluation: '高',
-          loadRate: '0.86',
+          loadEvaluation: '-',
+          loadRate: '-',
           className: 'bad',
+          color: '#e62b2d',
           name: '互联网资源池',
           type: 'inner'
         },
         {
-          loadEvaluation: '中',
-          loadRate: '0.62',
-          className: 'normal',
+          loadEvaluation: '-',
+          loadRate: '-',
+          className: 'bad',
+          color: '#e62b2d',
           name: '政务外网资源池',
           type: 'external'
-        }
-      ],
-      assetsList: [
-        {
-          code: '',
-          name: '服务器',
-          normalNum: 100,
-          abnormalNum: 10,
-          href: '/resource/overview',
-          icon: 'icon-device-server'
-        }, {
-          code: '',
-          name: '网络设备',
-          normalNum: 100,
-          abnormalNum: 10,
-          href: '/resource/overview',
-          icon: 'icon-device-network'
-        }, {
-          code: '',
-          name: '存储设备',
-          normalNum: 100,
-          abnormalNum: 10,
-          href: '/resource/overview',
-          icon: 'icon-device-storage'
-        }, {
-          code: '',
-          name: '安全设备',
-          normalNum: 100,
-          abnormalNum: 10,
-          href: '/resource/overview',
-          icon: 'icon-device-safety'
         }
       ],
       baseRegionList: {
@@ -395,27 +366,31 @@ export default {
           'regionType': 'inner',
           'data': [
             {
-              'name': 'network',
+              'name': 'service',
               'loadRate': 0.32,
               'loadEvaluation': '低',
+              'className': '',
               'loadCompare': -0.6
             },
             {
               'name': 'storage',
-              'loadRate': 0.52,
-              'loadEvaluation': '高',
+              'loadRate': 0.62,
+              'loadEvaluation': '中',
+              'className': '',
               'loadCompare': +0.4
             },
             {
-              'name': 'service',
+              'name': 'device',
               'loadRate': 0.36,
               'loadEvaluation': '低',
+              'className': '',
               'loadCompare': -0.2
             },
             {
-              'name': 'device',
-              'loadRate': 0.32,
-              'loadEvaluation': '低',
+              'name': 'network',
+              'loadRate': 0.82,
+              'loadEvaluation': '高',
+              'className': '',
               'loadCompare': -0.2
             }
           ]
@@ -426,30 +401,44 @@ export default {
           'regionType': 'external',
           'data': [
             {
-              'name': 'network',
+              'name': 'service',
               'loadRate': 0.32,
               'loadEvaluation': '低',
+              'className': '',
               'loadCompare': -0.6
             },
             {
               'name': 'storage',
               'loadRate': 0.52,
-              'loadEvaluation': '高',
+              'loadEvaluation': '低',
+              'className': '',
               'loadCompare': +0.4
             },
             {
-              'name': 'service',
-              'loadRate': 0.36,
-              'loadEvaluation': '低',
+              'name': 'device',
+              'loadRate': 0.92,
+              'loadEvaluation': '高',
+              'className': '',
               'loadCompare': -0.2
             },
             {
-              'name': 'device',
-              'loadRate': 0.32,
-              'loadEvaluation': '低',
+              'name': 'network',
+              'loadRate': 0.72,
+              'loadEvaluation': '中',
+              'className': '',
               'loadCompare': -0.2
             }
           ]
+        }
+      ],
+      assetsList: [
+        {
+          aberrantCount: 0,
+          devType: 'host',
+          devTypeCn: '服务器',
+          totalCount: 0,
+          href: '/resource/overview',
+          icon: 'icon-device-server'
         }
       ]
     }
@@ -495,7 +484,7 @@ export default {
         color = '#ffb438'
       }
       if (isColor) return color
-      else return className
+      return className
     },
     // 物理资源剩余容量信息
     getResCapacityPhy () {
@@ -527,7 +516,9 @@ export default {
     },
     // 查询物理资源负载信息
     getResLoadPhyResList () {
-      API.getResLoadPhyResList(this)
+      API.getResLoadPhyResList(this, {
+        summaryDimension: 'region'
+      })
         .then(res => {
           // console.log('//查询物理资源负载信息')
           if (res.status == 200 && res.statusText == 'OK') {
@@ -549,14 +540,51 @@ export default {
               }
             })
           }
+          console.log(this.resLoadPhyResList)
         })
     },
     // 物理设备容量统计信息
     getResCapacityPhyOverview () {
       API.getResCapacityPhyOverview(this)
         .then(res => {
-          console.log('//物理设备容量统计信息')
-          console.log(res)
+          // console.log('//物理设备容量统计信息')
+          // console.log(res)
+          if (res.status == 200 && res.statusText == 'OK') {
+            res = res.data.body
+            res.forEach((val, i) => {
+              switch (val.devType) {
+                case 'host':
+                  val.href = '/resource/overview'
+                  val.icon = 'icon-device-server'
+                  break
+                case 'host_manage':
+                  val.href = '/resource/overview'
+                  val.icon = 'icon-device-server'
+                  break
+                case 'host_computer':
+                  val.href = '/resource/overview'
+                  val.icon = 'icon-device-server'
+                  break
+                case 'host_storage':
+                  val.href = '/resource/overview'
+                  val.icon = 'icon-device-server'
+                  break
+                case 'network':
+                  val.href = '/resource/overview'
+                  val.icon = 'icon-device-server'
+                  break
+                case 'storage':
+                  val.href = '/resource/overview'
+                  val.icon = 'icon-device-server'
+                  break
+                case 'security':
+                  val.href = '/resource/overview'
+                  val.icon = 'icon-device-server'
+                  break
+              }
+            })
+            this.assetsList = res
+          }
         })
     },
     // 网络区域列表
@@ -602,6 +630,14 @@ export default {
           if (res.status == 200 && res.statusText == 'OK') {
             res = res.data.body
             console.log(res)
+            // mock数据处理
+            this.netAreaResPool.forEach((val, i) => {
+              val.data.forEach((nVal, nI) => {
+                nVal.className = this.switchClassName({value: nVal.loadRate, sort: -1})
+                nVal.color = this.switchClassName({value: nVal.loadRate, sort: -1, isColor: true})
+                nVal.loadCompare = (nVal.loadCompare > 0 ? '↑' : '↓') + Math.abs(nVal.loadCompare)
+              })
+            })
           }
         })
     }

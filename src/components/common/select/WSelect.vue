@@ -6,12 +6,13 @@
       v-model="inputValue"
       :readonly="!filterable"
       :placeholder="placeholder"
+      :clearable="clearable"
+      :size="size"
       @keyup.native="inputChange"
       @clear="reset"
       iconFix="icon-triangle">
 
     </base-input>
-    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
     <!-- <input type="text" class="DropDown-info default" placeholder="查询全部" href="javascript:;" /> -->
     <transition
       name="custom-classes-transition"
@@ -34,8 +35,19 @@ export default {
   mixins: [emitter],
   props: {
     list: Array,
+    size:{
+      type:String,
+      default:''
+    },
     value: [String, Number],
-    filterable: Boolean,
+    clearable:{
+      type:Boolean,
+      default:true
+    },
+    filterable: {
+      type:Boolean,
+      default:false
+    },
     placeholder:{
       type:String,
       default:'查询全部'
@@ -46,23 +58,31 @@ export default {
       isShow: false,
       inputValue: '',
       isReadOnly: true,
-      curList: [{id: null, name: this.placeholder}].concat(this.list) || []
+      // curList: [{id: null, name: this.placeholder}].concat(this.list) || []
+      curList: this.list || []
     }
   },
   created () {
-
+    this.initSelect()
   },
   watch: {
     list () {
-      this.curList = [{id: null, name: this.placeholder}].concat(this.list)
+      // this.curList = [{id: null, name: this.placeholder}].concat(this.list)
+      this.curList = this.list
     }
   },
   methods: {
     debouncedOnInputChange () {
 
     },
+    initSelect () {
+      this.list.forEach((item) => {
+         if(this.value == item.value) this.inputValue = item.name
+      })
+    },
     reset () {
-      this.curList = [{id: null, name: this.placeholder}].concat(this.list)
+      // this.curList = [{id: null, name: this.placeholder}].concat(this.list)
+      this.curList = this.list
       this.$emit('input', null)
       this.inputValue = ''
     },

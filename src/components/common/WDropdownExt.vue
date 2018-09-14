@@ -16,7 +16,7 @@
             </ul>
           </el-scrollbar>
         </div>
-        <div class="tip__nodata" v-show="!length && itemlist.length">{{nodatatext}}</div>
+        <div class="tip__nodata" v-show="!length">{{nodatatext}}</div>
     </div>
 </template>
 

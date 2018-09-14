@@ -2,7 +2,19 @@
   <div>
     <el-row :gutter="15" style="overflow:hidden;">
       <el-col :span="6">
-        <app-list @click="itemClickHandle" :list="vmList" placeholder="请输入虚拟机名称" :orgName='orgName'>
+        <app-list :name='orgName'>
+          <w-dropdown-ext style="margin-top:1em;"
+            slot="list2"
+            @item-click="appClickHandle"
+            :show="true"
+            :itemlist="businessList"
+            placeholder="请输入"
+            nodatatext="没找到虚拟机"
+            :add-icon="true"
+            :has-status="true"
+            icon-class="pageIconFont icon-webpage"
+            status-icon-type="text"
+            :item-text-style="{width:'75%'}"></w-dropdown-ext>
         </app-list>
       </el-col>
       <el-col :span="18">
@@ -150,48 +162,7 @@ export default {
   data () {
     var _this = this
     return {
-      crumbs: [{
-        iconClass: 'iconfont icon-flow',
-        name: '资源监管'
-      }, {
-        iconClass: 'iconfont icon-flow_overview-management',
-        name: '容量分析'
-      }],
-      form: {
-        vmType: '',
-        diskValue: ''
-      },
-      rules: {
-        vmType: [
-          {
-            validator (rule, value, callback) {
-              if (!_this.form.vmType) {
-                callback(new Error('请选择虚拟机规格'))
-              } else {
-                callback()
-              }
-            }
-          }
-        ],
-        diskValue: [
-          {
-            validator (rule, value, callback) {
-              if (value) {
-                callback()
-              } else {
-                callback(new Error('请选择磁盘大小'))
-              }
-            }
-          }
-        ]
-      },
-      diskList: [
-        {
-          id: 2,
-          name: 'dfas'
-        }
-      ],
-      vmList: [{
+      businessList: [{
         existExceptionFlow: null,
         id: '4fba5622-a306-4cd1-aa76-3d423d0674e4',
         name: 'net-test-business1测试',
@@ -200,10 +171,7 @@ export default {
       }],
       orgName: '?',
       curBusinessName: '?',
-      dialogVisible: false,
       runStatusTxt: '', // 运行状态
-      businessName: '-',
-      businessIp: '-',
       LastMonthLoad: {
         max: -1,
         maxTime: '-',

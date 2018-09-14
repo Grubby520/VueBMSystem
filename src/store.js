@@ -230,6 +230,24 @@ export default new Vuex.Store({
               'children': []
             },
             {
+              'id': '36',
+              'parentId': '6',
+              'level': '2',
+              'name': '资源分配',
+              'icon': 'iconfont icon-resource_allocation-management',
+              'url': '/resource/distribution',
+              'children': []
+            },
+            {
+              'id': '37',
+              'parentId': '7',
+              'level': '2',
+              'name': '资源负载',
+              'icon': 'iconfont icon-resource_load-management',
+              'url': '/resource/load',
+              'children': []
+            },
+            {
               'id': '45',
               'parentId': '5',
               'level': '2',

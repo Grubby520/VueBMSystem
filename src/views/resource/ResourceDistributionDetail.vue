@@ -6,7 +6,7 @@
           <div class="nav-logo"><span class="pageIconFont icon-respool"></span></div>
           <div class="nav-content">
             <h1 class="page-portrait" id="chooseBtn">
-              {{curOrgName}}
+              {{routerParams.orgName}}
               <span v-if="isAdminRole()" class="pageIconFont icon-triangle-bottom page-portrait-icon"></span>
             </h1>
             <w-dropdown
@@ -20,7 +20,7 @@
             <div class="nav-content__detail">
               <h3>业务系统</h3>
               <div class="nav-content__basicinfo">
-                总数：<span>100</span>个
+                总数：<span>{{orgCounts}}</span>个
                 <span class="statistics-con fr">
                   <span class="label-btn normal" style="margin-right:0.5em;">容量充足0</span>
                   <span class="label-btn abnormal">容量不足1</span>
@@ -113,6 +113,7 @@ import WDropdownExt from '@/components/common/WDropdownExt.vue'
 import WTitle from '@/components/common/WTitle.vue'
 import NoData from '@/components/common/NoData.vue'
 import API from '@/assets/js/api/api.js'
+import {URLMAP} from '@/assets/js/api/api.js'
 import Util from '@/assets/js/util/util.js'
 import Helper from '@/assets/js/util/helper.js'
 import CountUp from '@/assets/js/lib/countUp-1.9.3.js'
@@ -127,15 +128,17 @@ export default {
         iconClass: 'iconfont icon-resource_allocation-management',
         name: '资源分配'
       }],
+      routerParams: this.$route.params,
+      orgCounts: 0,
+      orgList: [],
+      // curOrgId: this.$route.params ? this.$route.params.orgId : '',
+      // curOrgName: '？',
       roleLevel: this.$store.state.userInfo.roleLevel,
-      curOrgId: this.$route.params ? this.$route.params.orgId : '',
-      curOrgName: '？',
       showDropDown: false,
       placeholder: '请输入资源池',
       nodatatext: '暂无数据',
       placeholder1: '请输入业务系统名称',
       nodatatext1: '没找到业务系统',
-      orgList: [],
       appList: [],
       curBusinessName: '？',
       curServerTime: new Date(),
@@ -173,16 +176,74 @@ export default {
       }
     }
   },
+  created () {
+  let vm = this
+  API.getServerTime(vm)
+    .then(function (res) {
+      if (res.data && res.data.body) {
+        vm.curServerTime = res.data.body.systemCurrentTimeMillis
+      }
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+    // API
+    this.getResBusinessListOfOrg(this.routerParams)
+    this.getLoadVmList()
+  },
   methods: {
+    // API
+    // 资源池应用列表
+    getResBusinessListOfOrg({orgId, regionProviderId}) {
+      API.getResBusinessListOfOrg(this, {
+        orgId: orgId,
+        regionProviderId : regionProviderId
+      })
+        .then((res) => {
+          console.log('资源池应用列表')
+          console.log(res)
+          if (res.status == 200 && res.statusText == 'OK') {
+            res = res.data.body
+            // 获取orgList
+            //   vm.orgList = _data.data.map(function (ele) {
+            //   return {
+            //     name: ele.orgName,
+            //     id: ele.orgId
+            //   }
+            // })
+            this.routerParams.orgName = res[0].orgName
+            this.orgCounts = res.length
+            this.orgList = res.map((val, i) => {
+              console.log(val)
+              return {
+                id: val.businessId,
+                name: val.businessName
+              }
+            })
+
+          }
+        })
+    },
+    // 云主机负载信息
+    getLoadVmList(params) {
+      let _params = params || {
+        filterType: 'vm',
+        summaryDimensionL: 'vm'
+      }
+      this.$http.get(URLMAP.loadVmList, params)
+        .then((res) => {
+          console.log(res)
+        })
+    },
     isAdminRole () {
       return this.roleLevel == 1 || this.roleLevel == 2
     },
     itemClickHandle: function (data) {
-      let vm = this
-      vm.showDropDown = false
-      vm.curOrgName = data.name
-      vm.curOrgId = data.id
-      vm.getBusinessList()
+      // let vm = this
+      // vm.showDropDown = false
+      // vm.curOrgName = data.name
+      // vm.curOrgId = data.id
+      // vm.getBusinessList()
     },
     appClickHandle: function (data, event) {
       let vm = this
@@ -195,52 +256,37 @@ export default {
       }
       vm.clearTimerIdS()
 
-      vm.curBusinessName = data.name
-    },
-    getOrgList () {
-      let vm = this
-      API.getOrgList(vm, {page: 1, pageSize: 100000})
-        .then(function (res) {
-          if (res.data && res.data.body) {
-            let _data = res.data.body
-            vm.orgList = _data.data.map(function (ele) {
-              return {
-                name: ele.orgName,
-                id: ele.orgId
-              }
-            })
-          }
-        })
+      vm.curBusinessName = data.namename
     },
     getUserOrgInfo () {
       let vm = this,
         userId = vm.$store.state.userInfo.userId
 
       if (vm.isAdminRole()) {
-        vm.getOrgList()
-        API.getOrgList(vm, {page: 1, pageSize: 20, orgId: vm.curOrgId})
-          .then(function (res) {
-            if (res.data && res.data.body && res.data.body.data.length > 0) {
-              let _data = res.data.body.data[0]
-              vm.curOrgName = _data.orgName
-              vm.curOrgId = _data.orgId
-            }
-          })
-          .then(function () {
-            vm.getBusinessList()
-          })
-      } else {
-        API.getUserInfo(vm, userId)
-          .then(function (res) {
-            if (res.data && res.data.body) {
-              let _data = res.data.body
-              vm.curOrgName = _data.orgName
-              vm.curOrgId = _data.orgId
-            }
-          })
-          .then(function () {
-            vm.getBusinessList()
-          })
+        // vm.getOrgList()
+      //   API.getOrgList(vm, {page: 1, pageSize: 20, orgId: vm.curOrgId})
+      //     .then(function (res) {
+      //       if (res.data && res.data.body && res.data.body.data.length > 0) {
+      //         let _data = res.data.body.data[0]
+      //         vm.curOrgName = _data.orgName
+      //         vm.curOrgId = _data.orgId
+      //       }
+      //     })
+      //     .then(function () {
+      //       vm.getBusinessList()
+      //     })
+      // } else {
+      //   API.getUserInfo(vm, userId)
+      //     .then(function (res) {
+      //       if (res.data && res.data.body) {
+      //         let _data = res.data.body
+      //         vm.curOrgName = _data.orgName
+      //         vm.curOrgId = _data.orgId
+      //       }
+      //     })
+      //     .then(function () {
+      //       vm.getBusinessList()
+      //     })
       }
     },
     getBusinessList () {
@@ -348,18 +394,6 @@ export default {
       }
       return value
     }
-  },
-  created () {
-    let vm = this
-    API.getServerTime(vm)
-      .then(function (res) {
-        if (res.data && res.data.body) {
-          vm.curServerTime = res.data.body.systemCurrentTimeMillis
-        }
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
   },
   mounted: function () {
     let vm = this

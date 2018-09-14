@@ -75,7 +75,7 @@ export default{
   },
   computed: {
     showClear () {
-      return !!this.curValue && (this.focusing || this.hovering)
+      return (!!this.curValue && (this.focusing || this.hovering)) && this.clearable
     }
   },
   watch: {
@@ -100,6 +100,7 @@ export default{
       this.$emit('keyup')
     },
     clear () {
+      if(!this.clearable) return
       this.clearable = false
       this.curValue = null
       this.$emit('clear')

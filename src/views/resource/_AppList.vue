@@ -3,55 +3,39 @@
     <div class="nav-logo"><span class="pageIconFont icon-organization"></span></div>
     <div class="nav-content">
       <h1 class="page-portrait" id="chooseBtn">
-        {{orgName}}
+        {{name}}
+        <span  class="pageIconFont icon-triangle-bottom page-portrait-icon"></span>
       </h1>
+      <slot name="list1"></slot>
       <div class="applist__container">
-        <w-dropdown-ext style="margin-top:1em;"
-        @item-click="itemClickHandle"
-        :show="true"
-        :itemlist="list"
-        :placeholder="placeholder"
-        nodatatext="没找到业务系统"
-        :add-icon="true"
-        :has-status="true"
-        icon-class="pageIconFont icon-webpage"
-        status-icon-type="text"
-        :item-text-style="{width:'75%'}"></w-dropdown-ext>
+        <slot name="list2"></slot>
       </div>
-
     </div>
   </div>
 </template>
 <script>
 
-  import WDropdown from '@/components/common/WDropdown.vue'
-  import WDropdownExt from '@/components/common/WDropdownExt.vue'
-  export default {
-    props:{
-      list:Array,
-      placeholder:String,
-      orgName:String
-    },
-    data(){
-      return{}
-    },
-    methods:{
-      itemClickHandle(data, event){
-        if (event.target.localName == 'li') {
-          $(event.target).siblings().removeClass('active')
-            .end().addClass('active')
-        } else if (event.target.localName == 'span') {
-          $(event.target).parent().siblings().removeClass('active')
-            .end().addClass('active')
-        }
-        this.$emit('click',data, event)
-      }
-    },
-    components:{
-        WDropdown,
-        WDropdownExt
+
+export default {
+  data(){
+    return {
+
     }
+  },
+  props: {
+    name:String,
+  },
+  mounted(){
+
+  },
+  methods: {
+
+
+
+  },
+  components: {
   }
+}
 </script>
 <style lang="scss" scoped>
   .whiteBg {
@@ -72,6 +56,11 @@
       text-align:center;
       background: #00a0e9;
     }
+  }
+  .page-portrait-icon{
+    color: #00a0e9;
+    font-size: 12px;
+    margin-left: 0.4em;
   }
   .applist__container {
     margin: 0 auto;

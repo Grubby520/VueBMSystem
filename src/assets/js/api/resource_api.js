@@ -5,7 +5,7 @@ const RESOURCE_URL = {
   // 查询云主机配置状态统计信息（首页）
   resInstanceStatistics: '/resource/instance-statistics',
   // 查询云主机配置状态统计信息（分配详情页）
-  resInstanceConfigStatisticst: '/resource/instance-config-statisticst',
+  resInstanceConfigStatisticst: '/resource/instance-config-statistics',
   // 查询物理资源负载信息
   resLoadPhyResList: '/resource/load-physical-resource-list',
   // 物理设备容量统计信息
@@ -17,15 +17,38 @@ const RESOURCE_URL = {
   // 网络区域资源池负载信息
   resLoadNetAreaResPool: '/resource/load-net-area-resource-pool',
   // 资源容量
-  // 资源池及对应单位和应用列表
-  // 资源池容量信息
+  // 资源池及对应单位和应用列表 regionProvider/list
+  regionProviderList: '/base/regionProvider/list',
+  // 资源池容量信息(虚拟资源容量信息)
   resCapacityVirtualList: '/resource/resource-capacity-virtual-list',
   // 资源池负载趋势信息
   resLoadTrendResPoolList: '/resource/load-trend-resource-pool-list',
   // 查询配置变更事件
-  resConfigChangeEventList: '/resource/config-change-event-list',
+  resEventDeviceChange: '/resource/event-device-change',
   // 查询负载异常事件
-  resLoadAbEventList: '/resource/load-abnormal-event-list'
+  resEventLoad: '/resource/event-load',
+  // 资源分配
+  // 查询资源池容量配置详情信息
+  resCapacityConfigPool: '/resource/resource-capacity-config-pool',
+  // 查询虚拟资源统计信息
+  resVirtualOverview: '/resource/resource-virtual-overview',
+  // 部门资源分配较多top5
+  orgResFreeTop: '/resource/org-resource-free-top',
+  // 查询部门资源配置分配详情
+  orgResAllocateDetail: '/resource/org-resource-allocate-detail',
+  // 查询云主机负载信息
+  resourceLoadVmList: '/resource/load-vm-list',
+  // 查询云主机负载趋势信息
+  loadTrendVmList: '/resource/load-trend-vm-list',
+  // 查询云主机配置状态详细信息
+  resInstanceConfigDetail: '/resource/instance-config-detail',
+  // 查询云主机配置仿真信息
+  resInstanceConfigMock: '/resource/instance-config-mock',
+  // 资源分配详情
+  // 资源池应用列表
+  resBusinessListOfOrg: '/base/regionProvider/getBusinessListOfOrg',
+  // 查询云主机负载信息
+  loadVmList: '/resource/load-vm-list'
 }
 
 function paramsSeri(params) {
@@ -54,11 +77,12 @@ export default {
       params: _params
     })
   },
-  getResLoadPhyResList (vm) {
+  getResLoadPhyResList (vm, params) {
+    let _params = params || {
+      summaryDimension: 'region'
+    }
     return vm.$http.get(RESOURCE_URL.resLoadPhyResList, {
-      params: {
-        summaryDimension: 'region'
-      }
+      params: _params
     })
   },
   getResCapacityPhyOverview (vm) {
@@ -78,26 +102,94 @@ export default {
       paramsSerializer: paramsSeri
     })
   },
-  getResLoadNetAreaResPool (vm) {
-    return vm.$http.get(RESOURCE_URL.resLoadNetAreaResPool)
+  getResLoadNetAreaResPool (vm, params) {
+    let _params = params || {}
+    return vm.$http.get(RESOURCE_URL.resLoadNetAreaResPool, {
+      params: _params
+    })
   },
   // 资源容量
+  getRegionProviderList (vm) {
+    return vm.$http.get(RESOURCE_URL.regionProviderList)
+  },
   getResCapacityVirtualList (vm) {
     return vm.$http.get(RESOURCE_URL.resCapacityVirtualList)
   },
   getResLoadTrendResPoolList (vm) {
     return vm.$http.get(RESOURCE_URL.resLoadTrendResPoolList)
   },
-  getResConfigChangeEventList (vm, params) {
-    let _params = params || {
-      eventType: ''
-    }
-    return vm.$http.get(RESOURCE_URL.resConfigChangeEventList, {
+  // table
+  getResEventDeviceChange (vm, params = {}) {
+    let _params = params
+    return vm.$http.get(RESOURCE_URL.resEventDeviceChange, {
       params: _params
     })
   },
-  getResLoadAbEventList (vm) {
-    return vm.$http.get(RESOURCE_URL.resLoadAbEventList)
+  // table
+  getResEventLoad (vm, params = {}) {
+    return vm.$http.get(RESOURCE_URL.resEventLoad, {
+      params: params
+    })
+  },
+  getResCapacityConfigPool (vm, params) {
+    // poolId? regionProviderId
+    let _params = params || {}
+    return vm.$http.get(RESOURCE_URL.resCapacityConfigPool, {
+      params: _params
+    })
+  },
+  getResVirtualOverview (vm, params) {
+    // poolId?
+    let _params = params || {}
+    return vm.$http.get(RESOURCE_URL.resVirtualOverview, {
+      params: _params
+    })
+  },
+  getOrgResFreeTop (vm, params) {
+    // poolId?
+    let _params = params || {
+      resourcePoolId: '' // 对应 regionProviderId
+    }
+    return vm.$http.get(RESOURCE_URL.orgResFreeTop, {
+      params: _params
+    })
+  },
+  getOrgResAllocateDetail (vm, params) {
+    // resourcePoolId - regionProviderId
+    let _params = params || {}
+    return vm.$http.get(RESOURCE_URL.orgResAllocateDetail, {
+      params: _params
+    })
+  },
+  getResourceLoadVmList(params) {
+    return this.$http.get(RESOURCE_URL.resourceLoadVmList, {
+      params: params
+    })
+  },
+  getLoadTrendVmList(params) {
+    return this.$http.get(RESOURCE_URL.loadTrendVmList, {
+      params: params
+    })
+  },
+  getResInstanceConfigDetail(params) {
+    return this.$http.get(RESOURCE_URL.resInstanceConfigDetail, {
+      params: params
+    })
+  },
+  // 查询云主机配置仿真信息
+  getResInstanceConfigMock (params) {
+    return this.$http.get(RESOURCE_URL.resInstanceConfigMock, {
+      params: params
+    })
+  },
+  getResBusinessListOfOrg (vm, params) {
+    let _params = params || {
+      orgId: '',
+      regionProviderId : ''
+    }
+    return vm.$http.get(RESOURCE_URL.resBusinessListOfOrg, {
+      params: _params
+    })
   }
 }
 

@@ -14,7 +14,9 @@
 export default {
   props: {
     label: String,
-    text: String,
+    text: {
+      type: [String, Number]
+    },
     height: {
       type: Number,
       default: 0,
