@@ -48,7 +48,11 @@ const RESOURCE_URL = {
   // 资源池应用列表
   resBusinessListOfOrg: '/base/regionProvider/getBusinessListOfOrg',
   // 查询云主机负载信息
-  loadVmList: '/resource/load-vm-list'
+  loadVmList: '/resource/load-vm-list',
+  // 根据条件查询应用分页列表
+  businessPage: '/base/business/page',
+  // 查询云主机容量及配置信息
+  resCapacityConfigVmList: '/resource/resource-capacity-config-vm-list',
 }
 
 function paramsSeri(params) {

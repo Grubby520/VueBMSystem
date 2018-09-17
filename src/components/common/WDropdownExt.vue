@@ -9,7 +9,9 @@
             <ul class="list-module">
                 <li v-for ="(item,index) in datalist" @click="appClick(item,$event)" :key="index" :title="item.name">
                     <span v-if="addIcon" :class="iconClass"></span>
-                    <span class="list-item-text text-overflow__style" :style="itemTextStyle">{{item.name}}</span>
+                    <span class="list-item-text text-overflow__style" :style="itemTextStyle">
+                      {{item.name}}<span v-if='item.errorClass' class="pageIconFont" :class='item.errorClass'></span>
+                    </span>
                     <span v-if="statusIconType == 'text' && hasStatus" :class="item.statusClass">{{item.statusText}}</span>
                     <span v-if="statusIconType == 'icon' && hasStatus" :class="item.statusClass"></span>
                 </li>
@@ -113,10 +115,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  @import '@/assets/scss/component/_var.scss';
     .text-overflow__style {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+    }
+    .idle {
+      color: $color-danger
+    }
+    .busy {
+      color: $color-danger
     }
     .vue-dropdown-ext {
 

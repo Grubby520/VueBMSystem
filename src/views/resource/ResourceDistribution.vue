@@ -399,7 +399,7 @@ export default {
             res = res.data.body
             if(!res.length){
               // mock
-              poolList = [
+              res = [
                   {
                     "capacityStatus": "1",
                     "capacityStatusCn": "充足",
